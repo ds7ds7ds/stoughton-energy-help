@@ -1,0 +1,1998 @@
+<title>Stoughton Energy Help</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Outfit:wght@400;500;600&family=Figtree:wght@400;500;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ===== Look 1: Tesla Studio (default) — white canvas, one electric-blue action colour, sharp corners, no shadows ===== */
+:root,:root[data-look="tesla"]{
+  --bg:#FFFFFF; --surface:#FFFFFF; --fill:#F4F4F4; --fill-2:#EAEAEA; --line:#E2E3E4; --tile-line:#D0D1D2; --ink:#171A20; --muted:#5C5E62;
+  --act:#3E6AE1; --act-ink:#FFFFFF; --act-soft:#EEF2FC; --good:#127A4E; --good-soft:#E6F3EC; --bad:#B42318; --bad-soft:#FDECEA; --amber:#8A5300; --amber-soft:#FBF1E0;
+  --c-bills:#3E6AE1; --c-loan:#5C5E62;
+  --tint-a:#EEF2FC; --tint-a-ink:#3E6AE1; --tint-b:#EEF2FC; --tint-b-ink:#3E6AE1; --tint-c:#EEF2FC; --tint-c-ink:#3E6AE1;
+  --sky-1:#F1F1F1; --sky-2:#FAFAFA; --haze-1:#E7E3DC;
+  --r-card:12px; --r-ctl:6px; --r-btn:4px; --w-head:500; --ls-head:-0.015em; --w-bold:600;
+  --font:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --shadow:none; --btn-shadow:none; --sw-off:#E2E3E4; --sw-off-line:#8E8E8E;
+  --st-grass:#ECEEEC; --st-soil:#D8D3CA; --st-wall:#FFFFFF; --st-roof:#2B2F36; --st-trim:#FFFFFF; --st-door:#171A20; --st-glass:#BCCFE2; --st-glow:0;
+  --st-solar:#16233A; --st-unit:#F2F2F2; --st-insul:#F2B84B; --st-car:#C9CCD1; --st-ev:#3E6AE1; --st-loop:#3E6AE1; --st-tank:#8E8E8E; --st-tree:#C9D6CD;
+  --st-trunk:#9A8F84; --st-far:#E6E7E8; --st-drive:#D6D7D9; --st-smoke:#B5B7BB; --st-hemi-sky:#FFFFFF; --st-hemi-gnd:#CFCFCF; --st-sun:1.35;
+  /* flat drawing fallback */
+  --st-line:#B8BCC2; --st-win:#BCCFE2; --st-mull:#FFFFFF; --st-brick:#8C5A48; --st-cloud:#FFFFFF; --st-earth:#D8D3CA; --st-solar-l:#4E6A91; --st-sun-c:#F2C548;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-look]),:root[data-look="tesla"]:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0E1014; --surface:#15181D; --fill:#1B1E24; --fill-2:#242830; --line:#2A2E36; --tile-line:#393C41; --ink:#F4F4F4; --muted:#A5A8AD;
+    --act:#7B9BF5; --act-ink:#0B0D12; --act-soft:#1A2544; --good:#4CC38A; --good-soft:#12291F; --bad:#FF8A80; --bad-soft:#3A1715; --amber:#F0B45C; --amber-soft:#2E2210;
+    --c-bills:#7B9BF5; --c-loan:#8E9196; --tint-a:#1A2544; --tint-a-ink:#7B9BF5; --tint-b:#1A2544; --tint-b-ink:#7B9BF5; --tint-c:#1A2544; --tint-c-ink:#7B9BF5;
+    --sky-1:#1A1D23; --sky-2:#0E1014; --haze-1:#241F19; --sw-off:#393C41; --sw-off-line:#8E8E8E;
+    --st-grass:#2A2E33; --st-soil:#1D1B18; --st-wall:#E3E4E6; --st-roof:#0B0C0E; --st-trim:#F4F4F4; --st-door:#171A20; --st-glass:#F2C66D; --st-glow:0.9;
+    --st-solar:#0C1526; --st-unit:#C9CBCF; --st-insul:#F2B84B; --st-car:#5C5E62; --st-ev:#7B9BF5; --st-loop:#7B9BF5; --st-tank:#6A6D72; --st-tree:#3A4640;
+    --st-trunk:#4E463E; --st-far:#2E3238; --st-drive:#393C41; --st-smoke:#6A6D72; --st-hemi-sky:#8FA3C8; --st-hemi-gnd:#1A1A1A; --st-sun:0.9;
+    --st-line:#3A3E45; --st-win:#F2C66D; --st-mull:#2B2F36; --st-brick:#5E3A2F; --st-cloud:#232830; --st-earth:#1D1B18;
+  }
+}
+:root[data-theme="dark"]:not([data-look]),:root[data-look="tesla"][data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0E1014; --surface:#15181D; --fill:#1B1E24; --fill-2:#242830; --line:#2A2E36; --tile-line:#393C41; --ink:#F4F4F4; --muted:#A5A8AD;
+  --act:#7B9BF5; --act-ink:#0B0D12; --act-soft:#1A2544; --good:#4CC38A; --good-soft:#12291F; --bad:#FF8A80; --bad-soft:#3A1715; --amber:#F0B45C; --amber-soft:#2E2210;
+  --c-bills:#7B9BF5; --c-loan:#8E9196; --tint-a:#1A2544; --tint-a-ink:#7B9BF5; --tint-b:#1A2544; --tint-b-ink:#7B9BF5; --tint-c:#1A2544; --tint-c-ink:#7B9BF5;
+  --sky-1:#1A1D23; --sky-2:#0E1014; --haze-1:#241F19; --sw-off:#393C41; --sw-off-line:#8E8E8E;
+  --st-grass:#2A2E33; --st-soil:#1D1B18; --st-wall:#E3E4E6; --st-roof:#0B0C0E; --st-trim:#F4F4F4; --st-door:#171A20; --st-glass:#F2C66D; --st-glow:0.9;
+  --st-solar:#0C1526; --st-unit:#C9CBCF; --st-insul:#F2B84B; --st-car:#5C5E62; --st-ev:#7B9BF5; --st-loop:#7B9BF5; --st-tank:#6A6D72; --st-tree:#3A4640;
+  --st-trunk:#4E463E; --st-far:#2E3238; --st-drive:#393C41; --st-smoke:#6A6D72; --st-hemi-sky:#8FA3C8; --st-hemi-gnd:#1A1A1A; --st-sun:0.9;
+  --st-line:#3A3E45; --st-win:#F2C66D; --st-mull:#2B2F36; --st-brick:#5E3A2F; --st-cloud:#232830; --st-earth:#1D1B18;
+}
+
+/* ===== Look 2: Apple Daylight — soft grey panels, blue pill buttons, big tight headlines ===== */
+:root[data-look="apple"]{
+  --bg:#FFFFFF; --surface:#FFFFFF; --fill:#F5F5F7; --fill-2:#E8E8ED; --line:#D2D2D7; --tile-line:transparent; --ink:#1D1D1F; --muted:#6E6E73;
+  --act:#0071E3; --act-ink:#FFFFFF; --act-soft:#E8F2FD; --good:#1B7A33; --good-soft:#E9F6EC; --bad:#D70015; --bad-soft:#FDEBEC; --amber:#A64B00; --amber-soft:#FFF3E5;
+  --c-bills:#1B7A33; --c-loan:#C93400;
+  --tint-a:#E9F6EC; --tint-a-ink:#1B7A33; --tint-b:#FFF3E5; --tint-b-ink:#A64B00; --tint-c:#E8F2FD; --tint-c-ink:#0071E3;
+  --sky-1:#E4EFF9; --sky-2:#F9FBFD; --haze-1:#ECE7DE;
+  --r-card:22px; --r-ctl:14px; --r-btn:980px; --w-head:600; --ls-head:-0.028em; --w-bold:600;
+  --font:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --shadow:0 2px 12px rgba(0,0,0,.06); --btn-shadow:none; --sw-off:#E9E9EA; --sw-off-line:#8E8E93;
+  --st-grass:#CFE3C8; --st-soil:#CDBBA0; --st-wall:#FAFAF7; --st-roof:#4A4F57; --st-trim:#FFFFFF; --st-door:#2C5E8F; --st-glass:#BCD6EA; --st-glow:0;
+  --st-solar:#1C2B45; --st-unit:#F5F5F7; --st-insul:#FFB340; --st-car:#D5D7DB; --st-ev:#0071E3; --st-loop:#0A84FF; --st-tank:#8E8E93; --st-tree:#9CCB8E;
+  --st-trunk:#8B6E55; --st-far:#E3E6E9; --st-drive:#CFCFD3; --st-smoke:#BFC3C8; --st-hemi-sky:#DDEBFA; --st-hemi-gnd:#B7C9A8; --st-sun:1.45;
+  --st-line:#B8BCC2; --st-win:#BCD6EA; --st-mull:#FFFFFF; --st-brick:#9A5B45; --st-cloud:#FFFFFF; --st-earth:#CDBBA0;
+}
+@media (prefers-color-scheme: dark){
+  :root[data-look="apple"]:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#000000; --surface:#1C1C1E; --fill:#1C1C1E; --fill-2:#2C2C2E; --line:#38383A; --tile-line:transparent; --ink:#F5F5F7; --muted:#A1A1A6;
+    --act:#409CFF; --act-ink:#000000; --act-soft:#0B2A4A; --good:#30D158; --good-soft:#0E2A16; --bad:#FF6961; --bad-soft:#3A1412; --amber:#FFB340; --amber-soft:#2E2210;
+    --c-bills:#30D158; --c-loan:#FF9F0A; --tint-a:#0E2A16; --tint-a-ink:#30D158; --tint-b:#2E2210; --tint-b-ink:#FFB340; --tint-c:#0B2A4A; --tint-c-ink:#409CFF;
+    --sky-1:#0B1522; --sky-2:#000000; --haze-1:#221D17; --sw-off:#39393D; --sw-off-line:#8E8E93;
+    --st-grass:#1E2A1E; --st-soil:#2A2219; --st-wall:#E9E9EC; --st-roof:#141416; --st-trim:#F5F5F7; --st-door:#2C5E8F; --st-glass:#FFCF6E; --st-glow:0.9;
+    --st-solar:#0B1424; --st-unit:#C7C7CC; --st-insul:#FFB340; --st-car:#636366; --st-ev:#409CFF; --st-loop:#409CFF; --st-tank:#636366; --st-tree:#2F4A2F;
+    --st-trunk:#4A3B2E; --st-far:#2C2C2E; --st-drive:#3A3A3C; --st-smoke:#636366; --st-hemi-sky:#7F9CC4; --st-hemi-gnd:#111111; --st-sun:0.9;
+    --st-line:#3A3A3C; --st-win:#FFCF6E; --st-mull:#2C2C2E; --st-brick:#5E3A2F; --st-cloud:#1C2430; --st-earth:#2A2219;
+  }
+}
+:root[data-look="apple"][data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#000000; --surface:#1C1C1E; --fill:#1C1C1E; --fill-2:#2C2C2E; --line:#38383A; --tile-line:transparent; --ink:#F5F5F7; --muted:#A1A1A6;
+  --act:#409CFF; --act-ink:#000000; --act-soft:#0B2A4A; --good:#30D158; --good-soft:#0E2A16; --bad:#FF6961; --bad-soft:#3A1412; --amber:#FFB340; --amber-soft:#2E2210;
+  --c-bills:#30D158; --c-loan:#FF9F0A; --tint-a:#0E2A16; --tint-a-ink:#30D158; --tint-b:#2E2210; --tint-b-ink:#FFB340; --tint-c:#0B2A4A; --tint-c-ink:#409CFF;
+  --sky-1:#0B1522; --sky-2:#000000; --haze-1:#221D17; --sw-off:#39393D; --sw-off-line:#8E8E93;
+  --st-grass:#1E2A1E; --st-soil:#2A2219; --st-wall:#E9E9EC; --st-roof:#141416; --st-trim:#F5F5F7; --st-door:#2C5E8F; --st-glass:#FFCF6E; --st-glow:0.9;
+  --st-solar:#0B1424; --st-unit:#C7C7CC; --st-insul:#FFB340; --st-car:#636366; --st-ev:#409CFF; --st-loop:#409CFF; --st-tank:#636366; --st-tree:#2F4A2F;
+  --st-trunk:#4A3B2E; --st-far:#2C2C2E; --st-drive:#3A3A3C; --st-smoke:#636366; --st-hemi-sky:#7F9CC4; --st-hemi-gnd:#111111; --st-sun:0.9;
+  --st-line:#3A3A3C; --st-win:#FFCF6E; --st-mull:#2C2C2E; --st-brick:#5E3A2F; --st-cloud:#1C2430; --st-earth:#2A2219;
+}
+
+/* ===== Look 3: Octopus Voltage — deep indigo, magenta action, cyan highlights, glow (single dark look) ===== */
+:root[data-look="octopus"]{
+  color-scheme:dark;
+  --bg:#100030; --surface:#180048; --fill:#1E0B55; --fill-2:#2A1470; --line:#2E1C6B; --tile-line:#3A2A80; --ink:#F0FFFF; --muted:#A49FC8;
+  --act:#F050F8; --act-ink:#100030; --act-soft:#2B0E5E; --good:#60F0F8; --good-soft:#0E2A55; --bad:#FF8FA3; --bad-soft:#3A0E3A; --amber:#FFC46B; --amber-soft:#2E1A3A;
+  --c-bills:#60F0F8; --c-loan:#F050F8;
+  --tint-a:#0E2A55; --tint-a-ink:#60F0F8; --tint-b:#3A0E4E; --tint-b-ink:#F050F8; --tint-c:#241466; --tint-c-ink:#A99CFF;
+  --sky-1:#22086A; --sky-2:#100030; --haze-1:#3A1050;
+  --r-card:16px; --r-ctl:12px; --r-btn:999px; --w-head:500; --ls-head:-0.01em; --w-bold:500;
+  --font:"Outfit",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --shadow:none; --btn-shadow:0 0 26px rgba(240,80,248,.45); --sw-off:#2E1C6B; --sw-off-line:#A49FC8;
+  --st-grass:#24105E; --st-soil:#140640; --st-wall:#3B2A8C; --st-roof:#0C0028; --st-trim:#5A48B8; --st-door:#F050F8; --st-glass:#60F0F8; --st-glow:1.3;
+  --st-solar:#0A1440; --st-unit:#5A48B8; --st-insul:#F050F8; --st-car:#4A3A8F; --st-ev:#60F0F8; --st-loop:#60F0F8; --st-tank:#5A4A9F; --st-tree:#2E1F80;
+  --st-trunk:#2A1B66; --st-far:#1E1150; --st-drive:#1A0B45; --st-smoke:#6A5AAF; --st-hemi-sky:#8C74FF; --st-hemi-gnd:#100030; --st-sun:0.8;
+  --st-line:#3A2A80; --st-win:#60F0F8; --st-mull:#3B2A8C; --st-brick:#5A2A7A; --st-cloud:#2A1470; --st-earth:#140640; --st-solar-l:#5840FF; --st-sun-c:#F0FFFF;
+}
+
+/* ===== Look 4: Material Evergreen — Google Material 3 tonal greens, very round, no lines ===== */
+:root[data-look="material"]{
+  --bg:#F7FBF4; --surface:#FFFFFF; --fill:#EBEFE8; --fill-2:#E0E4DD; --line:#C1C9C0; --tile-line:transparent; --ink:#181D19; --muted:#414942;
+  --act:#2A6A47; --act-ink:#FFFFFF; --act-soft:#B0F1C4; --good:#2A6A47; --good-soft:#B0F1C4; --bad:#BA1A1A; --bad-soft:#FFDAD6; --amber:#6F5200; --amber-soft:#FFDF9E;
+  --c-bills:#2A6A47; --c-loan:#8C6400;
+  --tint-a:#B0F1C4; --tint-a-ink:#002111; --tint-b:#FFDF9E; --tint-b-ink:#261A00; --tint-c:#BEEAF9; --tint-c-ink:#001F27;
+  --sky-1:#DCEFE0; --sky-2:#F7FBF4; --haze-1:#E9E1D2;
+  --r-card:28px; --r-ctl:18px; --r-btn:20px; --w-head:500; --ls-head:0; --w-bold:600;
+  --font:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --shadow:none; --btn-shadow:none; --sw-off:#E0E4DD; --sw-off-line:#717971;
+  --st-grass:#A8D5B0; --st-soil:#BFA27A; --st-wall:#FFFBF5; --st-roof:#3E5C4B; --st-trim:#FFFFFF; --st-door:#2A6A47; --st-glass:#BEEAF9; --st-glow:0;
+  --st-solar:#1F3347; --st-unit:#EBEFE8; --st-insul:#F3B34C; --st-car:#C8CEC9; --st-ev:#2A6A47; --st-loop:#3A6471; --st-tank:#717971; --st-tree:#6FAF7A;
+  --st-trunk:#7A5C45; --st-far:#DDE5DC; --st-drive:#C1C9C0; --st-smoke:#B8C0B8; --st-hemi-sky:#E3F4E8; --st-hemi-gnd:#9FB89F; --st-sun:1.4;
+  --st-line:#A8B2A8; --st-win:#BEEAF9; --st-mull:#FFFFFF; --st-brick:#9A5B45; --st-cloud:#FFFFFF; --st-earth:#BFA27A;
+}
+@media (prefers-color-scheme: dark){
+  :root[data-look="material"]:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1511; --surface:#171D19; --fill:#1B211D; --fill-2:#252B27; --line:#414942; --tile-line:transparent; --ink:#DFE4DD; --muted:#C1C9C0;
+    --act:#95D5AA; --act-ink:#003920; --act-soft:#0F5132; --good:#95D5AA; --good-soft:#0F5132; --bad:#FFB4AB; --bad-soft:#690005; --amber:#F0C048; --amber-soft:#3F2E00;
+    --c-bills:#95D5AA; --c-loan:#F0C048; --tint-a:#0F5132; --tint-a-ink:#B0F1C4; --tint-b:#3F2E00; --tint-b-ink:#FFDF9E; --tint-c:#004E5E; --tint-c-ink:#BEEAF9;
+    --sky-1:#16241B; --sky-2:#0F1511; --haze-1:#231F17; --sw-off:#252B27; --sw-off-line:#8B938A;
+    --st-grass:#1D3325; --st-soil:#2A2217; --st-wall:#E6E9E2; --st-roof:#0E1A13; --st-trim:#F2F5EE; --st-door:#2A6A47; --st-glass:#FFD27A; --st-glow:0.9;
+    --st-solar:#0C1824; --st-unit:#C1C9C0; --st-insul:#F3B34C; --st-car:#58605A; --st-ev:#95D5AA; --st-loop:#7CC7DA; --st-tank:#58605A; --st-tree:#2C5236;
+    --st-trunk:#4A3B2E; --st-far:#1F2922; --st-drive:#2C332E; --st-smoke:#58605A; --st-hemi-sky:#8FB7A0; --st-hemi-gnd:#0F1511; --st-sun:0.9;
+    --st-line:#414942; --st-win:#FFD27A; --st-mull:#252B27; --st-brick:#5E3A2F; --st-cloud:#1F2B24; --st-earth:#2A2217;
+  }
+}
+:root[data-look="material"][data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1511; --surface:#171D19; --fill:#1B211D; --fill-2:#252B27; --line:#414942; --tile-line:transparent; --ink:#DFE4DD; --muted:#C1C9C0;
+  --act:#95D5AA; --act-ink:#003920; --act-soft:#0F5132; --good:#95D5AA; --good-soft:#0F5132; --bad:#FFB4AB; --bad-soft:#690005; --amber:#F0C048; --amber-soft:#3F2E00;
+  --c-bills:#95D5AA; --c-loan:#F0C048; --tint-a:#0F5132; --tint-a-ink:#B0F1C4; --tint-b:#3F2E00; --tint-b-ink:#FFDF9E; --tint-c:#004E5E; --tint-c-ink:#BEEAF9;
+  --sky-1:#16241B; --sky-2:#0F1511; --haze-1:#231F17; --sw-off:#252B27; --sw-off-line:#8B938A;
+  --st-grass:#1D3325; --st-soil:#2A2217; --st-wall:#E6E9E2; --st-roof:#0E1A13; --st-trim:#F2F5EE; --st-door:#2A6A47; --st-glass:#FFD27A; --st-glow:0.9;
+  --st-solar:#0C1824; --st-unit:#C1C9C0; --st-insul:#F3B34C; --st-car:#58605A; --st-ev:#95D5AA; --st-loop:#7CC7DA; --st-tank:#58605A; --st-tree:#2C5236;
+  --st-trunk:#4A3B2E; --st-far:#1F2922; --st-drive:#2C332E; --st-smoke:#58605A; --st-hemi-sky:#8FB7A0; --st-hemi-gnd:#0F1511; --st-sun:0.9;
+  --st-line:#414942; --st-win:#FFD27A; --st-mull:#252B27; --st-brick:#5E3A2F; --st-cloud:#1F2B24; --st-earth:#2A2217;
+}
+
+/* ===== shared components (every colour, radius and weight comes from the look tokens) ===== */
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.45;padding-inline:16px;padding-block:0 40px;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+a{color:var(--act)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--act);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:var(--ls-head);font-weight:var(--w-head)}
+.good{color:var(--good)!important} .bad{color:var(--bad)!important}
+.hint{font-size:14px;color:var(--muted);margin:0}
+.linkbtn{border:0;background:none;color:var(--muted);font-size:14px;cursor:pointer;padding:6px 4px;text-decoration:underline;text-underline-offset:3px}
+.btn{border:0;border-radius:var(--r-btn);padding:13px 26px;min-height:48px;font-weight:var(--w-bold);font-size:15px;cursor:pointer;background:var(--act);color:var(--act-ink);white-space:nowrap;box-shadow:var(--btn-shadow);transition:filter .2s,box-shadow .2s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--fill);color:var(--ink);box-shadow:none}
+
+/* header + look picker */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:saturate(1.6) blur(16px);backdrop-filter:saturate(1.6) blur(16px);margin-inline:-16px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.topin{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.brand{border:0;background:none;padding:6px 0;font-weight:var(--w-bold);font-size:17px;letter-spacing:-.01em;cursor:pointer;margin-right:auto;white-space:nowrap}
+#restart{white-space:nowrap}
+.lookbtn{white-space:nowrap}
+@media (max-width:480px){.lookbtn .lbl2{display:none}.brand{font-size:16px}}
+.lookbtn{border:0;background:var(--fill);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;gap:0;align-items:center;min-height:38px}
+.lookbtn i{margin-right:8px;width:14px;height:14px;border-radius:50%;background:var(--act);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--act)}
+.looks{position:absolute;right:16px;top:calc(100% + 8px);width:min(360px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:10px;display:grid;gap:6px;box-shadow:0 18px 50px rgba(0,0,0,.18);z-index:20}
+.looks p{margin:4px 6px 6px;font-size:13px;color:var(--muted)}
+.lk{border:0;background:var(--fill);border-radius:var(--r-ctl);padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:center;text-align:left;cursor:pointer;color:var(--ink)}
+.lk[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--act);background:var(--act-soft)}
+.lk .sw4{grid-row:1 / span 2;display:grid;grid-template-columns:repeat(2,14px);gap:3px}
+.lk .sw4 span{width:14px;height:14px;border-radius:4px}
+.lk b{font-size:15px;font-weight:600}
+.lk small{grid-column:2;font-size:12.5px;color:var(--muted)}
+
+/* landing */
+.landing{max-width:1180px;margin:0 auto;display:grid;gap:24px;padding-top:28px;grid-template-columns:minmax(0,1fr);grid-template-areas:"text" "q" "paths" "art" "foot"}
+.ltext{grid-area:text} .lart{grid-area:art} .lq{grid-area:q} .paths{grid-area:paths} .lfoot{grid-area:foot}
+@media (min-width:900px){.landing{grid-template-columns:minmax(0,5fr) minmax(0,6fr);column-gap:48px;row-gap:26px;padding-top:40px;grid-template-areas:"text art" "q q" "paths paths" "foot foot"}.ltext{align-self:center}}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0}
+.ltext h1{font-size:clamp(40px,6.2vw,74px);line-height:1;letter-spacing:calc(var(--ls-head) * 1.6);margin:12px 0 16px}
+[data-look="octopus"] .ltext h1 span{color:var(--good)}
+.lede{font-size:18px;color:var(--muted);max-width:46ch;margin:0}
+.lart{background:linear-gradient(180deg,var(--sky-1),var(--sky-2) 78%);border-radius:var(--r-card);padding:14px 14px 16px;display:grid;gap:12px;position:relative;overflow:hidden;isolation:isolate}
+.flip{border:0;background:none;padding:0;cursor:pointer;display:block;width:100%;border-radius:var(--r-ctl)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ba span{display:grid;padding:10px 12px;border-radius:var(--r-ctl);color:var(--muted);transition:background .3s,color .3s}
+.ba span b{font-size:clamp(26px,3.4vw,38px);font-weight:var(--w-head);letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+.ba span small{font-size:13px}
+.ba span.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.ba span.on[data-k="1"] b{color:var(--good)}
+.cap{font-size:13px;color:var(--muted);margin:0;text-align:center}
+.lq{font-size:clamp(22px,2.6vw,28px);margin-top:10px}
+.paths{display:grid;gap:10px}
+@media (min-width:760px){.paths{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.path{border:1px solid var(--tile-line);text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;align-content:start;gap:8px 12px;background:var(--fill);border-radius:var(--r-card);padding:22px 22px 24px;color:var(--ink);transition:background .2s,transform .2s,border-color .2s}
+@media (hover:hover){.path:hover{background:var(--fill-2);transform:translateY(-2px);border-color:var(--act)}}
+.path .pic{grid-column:1 / -1;width:48px;height:48px;border-radius:var(--r-ctl);display:grid;place-items:center;margin-bottom:6px}
+.path.p-help .pic{background:var(--tint-a);color:var(--tint-a-ink)} .path.p-upgrade .pic{background:var(--tint-b);color:var(--tint-b-ink)} .path.p-explore .pic{background:var(--tint-c);color:var(--tint-c-ink)}
+.path b{font-size:21px;font-weight:var(--w-head);letter-spacing:-.015em}
+.path i{font-style:normal;font-size:22px;line-height:1;align-self:center;color:var(--act)}
+.path span.d{grid-column:1 / -1;color:var(--muted);font-size:15px}
+.lfoot{display:flex;flex-wrap:wrap;gap:4px 20px}
+
+/* studio: the house and the numbers */
+.studio{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;padding-top:18px}
+@media (min-width:980px){.studio{grid-template-columns:minmax(0,1fr) 430px;gap:44px}}
+.stagev{background:linear-gradient(180deg,var(--sky-1),var(--sky-2) 78%);border-radius:var(--r-card);padding:14px 12px 18px;display:grid;gap:12px;align-content:center;position:relative;min-width:0;overflow:hidden;isolation:isolate}
+@media (min-width:980px){.stagev{position:sticky;top:calc(env(safe-area-inset-top,0px) + 74px);min-height:min(760px,calc(100vh - 100px));padding:22px 28px 26px;align-self:start}}
+.stagev::before,.lart::before,.part::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--haze-1),transparent 65%);opacity:0;transition:opacity 1.2s ease;z-index:-1;pointer-events:none}
+.stagev.hazy::before,.lart.hazy::before,.part.hazy::before{opacity:1}
+.stop{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;min-height:34px}
+.chip{background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;box-shadow:var(--shadow);border:1px solid var(--tile-line)}
+.verdict{border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;background:var(--surface);font-variant-numeric:tabular-nums}
+.verdict.good{background:var(--good-soft);color:var(--good)!important} .verdict.bad{background:var(--bad-soft);color:var(--bad)!important}
+.h3d{position:relative;width:100%;aspect-ratio:16 / 10;max-height:56vh}
+.h3d canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;touch-action:pan-y;cursor:grab;border-radius:var(--r-ctl)}
+.h3d canvas:active{cursor:grabbing}
+.h3d .house{position:absolute;inset:0;width:100%;height:100%}
+.h3d .hint3d{position:absolute;right:8px;bottom:6px;z-index:1;font-size:12px;color:var(--muted);pointer-events:none;background:color-mix(in srgb,var(--surface) 80%,transparent);border-radius:999px;padding:3px 9px}
+.kit{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:30px}
+.kit span{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:500;box-shadow:var(--shadow);border:1px solid var(--tile-line)}
+.kit i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.specs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.specs > div{display:grid;gap:2px;align-content:start}
+.specs b{font-size:clamp(22px,2.8vw,36px);font-weight:var(--w-head);letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+.specs b i{font-style:normal;font-size:.5em;font-weight:500;color:var(--muted);letter-spacing:0;margin-left:2px}
+.specs .sl{font-size:13px;color:var(--muted)}
+.specs > div:first-child b{color:var(--muted)}
+.specs > div.hl b{color:var(--good)} .specs > div.lo b{color:var(--bad)}
+.lc{color:var(--amber)} .bc{color:var(--good)}
+.snote{font-size:13px;color:var(--muted);text-align:center;margin:0}
+
+/* panel */
+.panel{min-width:0;display:grid;align-content:start}
+.phead{display:grid;gap:10px;padding:4px 0 20px}
+.phead h1{font-size:30px;line-height:1.1;margin-top:10px}
+.phead p{color:var(--muted);margin:0}
+.sec{border-top:1px solid var(--line);scroll-margin-top:84px}
+.sech{border:0;background:none;text-align:left;display:grid;grid-template-columns:1fr auto;gap:2px 12px;width:100%;padding:18px 0;cursor:pointer;color:var(--ink);border-radius:8px}
+.sech .sn{font-size:19px;font-weight:var(--w-head);letter-spacing:-.01em}
+.sech .ss{grid-column:1;font-size:14px;color:var(--muted)}
+.sech .se{grid-row:1 / span 2;grid-column:2;align-self:center;font-size:14px;font-weight:500;color:var(--act)}
+@media (hover:hover){.sech:hover .sn{color:var(--act)}}
+.sec.open .sech{cursor:default;padding-bottom:12px}
+.sec.open .ss,.sec.open .se{display:none}
+.sec.todo .sn{color:var(--muted)}
+.secb{display:grid;gap:22px;padding:4px 0 28px}
+.grp{display:grid;gap:10px}
+.gl{font-size:14px;font-weight:600;color:var(--muted)}
+.note{background:var(--fill);border-radius:var(--r-ctl);padding:12px 14px;font-size:14px}
+
+/* segmented */
+.seg{display:flex;background:var(--fill);border-radius:calc(var(--r-ctl) + 3px);padding:3px;gap:2px;border:1px solid var(--tile-line)}
+.seg .o{flex:1 1 0;position:relative;min-width:0}
+.seg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.seg label{display:grid;place-items:center;align-content:center;text-align:center;min-height:42px;padding:6px;border-radius:var(--r-ctl);font-size:15px;font-weight:500;line-height:1.2;transition:background .2s,box-shadow .2s}
+.seg label small{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.seg input:checked + label{background:var(--act-soft);box-shadow:inset 0 0 0 2px var(--act);font-weight:var(--w-bold)}
+.seg input:focus-visible + label{outline:3px solid var(--act);outline-offset:1px}
+.modes label{min-height:36px;font-size:14px}
+
+/* tiles, packages, option rows */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tiles .tile:last-child:nth-child(odd){grid-column:1 / -1}
+.tile,.pkg,.orow{position:relative}
+.tile input,.pkg input,.orow input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.tile label,.pkg label,.orow label{display:grid;background:var(--fill);border:1px solid var(--tile-line);border-radius:var(--r-ctl);cursor:pointer;transition:background .2s,box-shadow .2s}
+.tile label{grid-template-columns:auto 1fr;gap:0 12px;align-items:center;padding:12px 14px;min-height:62px}
+.tile .ic{grid-row:1 / span 2;width:26px;height:26px}
+.tile .t{font-weight:var(--w-bold)}
+.tile .s{grid-column:2;font-size:13px;color:var(--muted)}
+.tile input:checked + label,.pkg input:checked + label,.orow input:checked + label{background:var(--act-soft);box-shadow:inset 0 0 0 2px var(--act);border-color:transparent}
+.tile input:checked + label .ic{color:var(--act)}
+@media (hover:hover){.tile label:hover,.pkg label:hover,.orow label:hover{background:var(--fill-2)}.tile input:checked + label:hover,.pkg input:checked + label:hover,.orow input:checked + label:hover{background:var(--act-soft)}}
+.tile input:focus-visible + label,.pkg input:focus-visible + label,.orow input:focus-visible + label{outline:3px solid var(--act);outline-offset:2px}
+.pkgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pkg label{gap:2px;padding:14px;align-content:start;height:100%}
+.pkg .pn{font-weight:var(--w-bold)}
+.pkg .pd{font-size:13px;color:var(--muted);min-height:2.6em}
+.pkg .pv{font-size:22px;font-weight:var(--w-head);letter-spacing:-.02em;margin-top:6px}
+.pkg .pv i{font-style:normal;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0}
+.pkg .pdl{font-size:13px;font-weight:500}
+.pkg.wide{grid-column:1 / -1}
+.pkg.wide label{background:linear-gradient(120deg,var(--tint-a),var(--tint-c));grid-template-columns:1fr auto;gap:2px 14px}
+.pkg.wide .pn,.pkg.wide .pd,.pkg.wide .badge{grid-column:1}
+.pkg.wide .pv,.pkg.wide .pdl{grid-column:2;text-align:right}
+.pkg.wide .pv{grid-row:2;margin-top:0} .pkg.wide .pdl{grid-row:3}
+.pkg.wide .pd{min-height:0}
+.badge{justify-self:start;font-size:12px;font-weight:600;color:var(--act);background:var(--surface);border-radius:999px;padding:3px 9px;margin-bottom:4px}
+.olist{display:grid;gap:8px}
+.orow label{grid-template-columns:1fr auto;gap:2px 14px;padding:14px 16px;align-items:center}
+.orow .t{font-weight:var(--w-bold)}
+.orow .s{grid-column:1;font-size:13px;color:var(--muted)}
+.orow .v{grid-row:1 / span 2;grid-column:2;text-align:right;font-size:13px;color:var(--muted)}
+.orow .v b{display:block;font-size:18px;color:var(--ink)}
+.orow input:disabled + label{opacity:.45;cursor:not-allowed}
+
+/* switch rows */
+.ulist{display:grid}
+.urow{position:relative;display:grid;grid-template-columns:28px 1fr auto;gap:1px 14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.urow input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.urow .ic{grid-row:1 / span 2;width:26px;height:26px}
+.urow .t{font-weight:var(--w-bold);font-size:15.5px}
+.urow .s{grid-column:2;font-size:13px;color:var(--muted)}
+.urow .s .dl{font-weight:600}
+.urow .sw{grid-row:1 / span 2;grid-column:3;width:48px;height:30px;border-radius:999px;background:var(--sw-off);box-shadow:inset 0 0 0 1.5px var(--sw-off-line);position:relative;transition:background .2s}
+.urow .sw::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.urow input:checked ~ .sw{background:var(--act);box-shadow:none}
+.urow input:checked ~ .sw::after{transform:translateX(18px)}
+.urow input:focus-visible ~ .sw{outline:3px solid var(--act);outline-offset:2px}
+.urow.hassub{border-bottom:0;padding-bottom:6px}
+.usub{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;padding:4px 0 16px 42px;border-bottom:1px solid var(--line)}
+.usub.col{display:grid;gap:12px}
+
+/* small inputs */
+.pill{border:1px solid var(--tile-line);background:var(--fill);border-radius:999px;padding:9px 15px;min-height:40px;font-size:14px;cursor:pointer}
+@media (hover:hover){.pill:hover{background:var(--fill-2)}}
+.pill[aria-pressed="true"]{background:var(--act-soft);box-shadow:inset 0 0 0 2px var(--act);border-color:transparent;font-weight:600}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.stepper{display:inline-flex;align-items:center;background:var(--fill);border-radius:999px;border:1px solid var(--tile-line)}
+.stepper button{width:44px;height:44px;border:0;background:none;font-size:22px;cursor:pointer;border-radius:999px}
+.stepper output{min-width:64px;text-align:center;font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+.big{font-size:34px;font-weight:var(--w-head);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.band{font-size:14px;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--act);height:28px}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.field{display:grid;gap:6px}
+.field label,.field .gl{font-size:14px;font-weight:600;color:var(--muted)}
+.field input{border:0;background:var(--fill);box-shadow:inset 0 0 0 1px var(--tile-line);border-radius:var(--r-ctl);padding:12px;width:100%;font-size:17px;font-variant-numeric:tabular-nums}
+.field input:focus{box-shadow:inset 0 0 0 2px var(--act);outline:none;background:var(--surface)}
+.money{position:relative}
+.money::before{content:"$";position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:17px;pointer-events:none}
+.money input{padding-left:26px}
+
+/* bottom bar */
+.pbar{position:sticky;bottom:0;z-index:4;background:var(--bg);border-top:1px solid var(--line);margin-inline:-16px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:14px}
+@media (min-width:980px){.pbar{margin-inline:0;padding-inline:0}}
+.pbar .sum{flex:1;min-width:0;font-size:13px;color:var(--muted);line-height:1.3}
+.pbar .sum b{display:block;font-size:21px;color:var(--ink);font-weight:var(--w-head);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pbar .sum em{font-style:normal;font-size:12px;font-weight:600;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:3px;letter-spacing:0}
+.pbar .sum em.good{background:var(--good-soft)} .pbar .sum em.bad{background:var(--bad-soft)}
+
+/* flat drawing (fallback when 3D can't run) */
+.house .g{transition:opacity .5s ease,transform .5s ease}
+.house .g.off{opacity:0;transform:translateY(8px)}
+.house.still .g,.house.still .carbody{transition:none}
+.house .carbody{fill:var(--st-car);transition:fill .5s ease}
+.house.ev .carbody{fill:var(--st-ev)}
+.house .sm{fill:var(--st-smoke);transform-box:fill-box;transform-origin:center;animation:rise 3.6s ease-in-out infinite}
+.house .sm.s2{animation-delay:1.2s} .house .sm.s3{animation-delay:2.4s}
+@keyframes rise{0%{opacity:0;transform:translateY(8px) scale(.8)}35%{opacity:.95}100%{opacity:0;transform:translateY(-16px) scale(1.15)}}
+
+/* plan */
+.plan{max-width:1180px;margin:0 auto;display:grid;gap:18px;padding-top:14px}
+.back{border:0;background:none;color:var(--act);font-weight:500;cursor:pointer;padding:6px 0;justify-self:start}
+.phero{display:grid;gap:22px;align-items:center;padding-bottom:10px}
+@media (min-width:900px){.phero{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:44px}}
+.phero h1{font-size:clamp(32px,4.6vw,56px);line-height:1.04;letter-spacing:calc(var(--ls-head) * 1.4);margin-bottom:12px}
+.phero .lede{font-size:17px}
+.phero .specs{margin-top:24px;text-align:left}
+.part{background:linear-gradient(180deg,var(--sky-1),var(--sky-2) 78%);border-radius:var(--r-card);padding:12px;position:relative;overflow:hidden;isolation:isolate}
+.card{background:var(--fill);border:1px solid var(--tile-line);border-radius:var(--r-card);padding:22px;display:grid;gap:14px}
+.card h2{font-size:22px}
+.card.cta{grid-template-columns:1fr;align-items:center}
+@media (min-width:700px){.card.cta{grid-template-columns:1fr auto}}
+.card .twrap{background:var(--surface);border-radius:var(--r-ctl);padding:4px 12px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;font-weight:600;color:var(--muted)}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+tr.tot td{font-weight:700;border-bottom:0}
+.twrap{overflow-x:auto}
+.wins,.first{display:grid;gap:14px;counter-reset:f;margin:0;padding:0;list-style:none}
+.wins li,.first li{counter-increment:f;display:grid;grid-template-columns:30px 1fr;gap:4px 12px;align-items:start}
+.wins li::before,.first li::before{content:counter(f);grid-row:1 / span 3;width:28px;height:28px;border-radius:50%;background:var(--act);color:var(--act-ink);display:grid;place-items:center;font-weight:600;font-size:14px}
+.wh{display:flex;justify-content:space-between;gap:4px 14px;flex-wrap:wrap}
+.first b{display:block}
+.prog{border-bottom:1px solid var(--line)}
+.prog:last-child{border-bottom:0}
+.prog summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;padding:12px 0;align-items:start}
+.prog summary::-webkit-details-marker{display:none}
+.prog .dot{width:10px;height:10px;border-radius:50%;margin-top:7px;background:var(--good)}
+.prog .dot.maybe{background:var(--amber)}
+.prog .dot.info{background:var(--muted)}
+.prog .pt{font-weight:600}
+.prog .pg{grid-column:2;font-size:14px;color:var(--muted)}
+.prog .chev{color:var(--muted);font-size:14px;margin-top:3px}
+.prog[open] .chev{transform:rotate(90deg)}
+.prog .body{padding:0 0 14px 22px;display:grid;gap:8px;font-size:15px}
+.prog ol{margin:0;padding:0;list-style:none;display:grid;gap:4px;counter-reset:st}
+.prog ol li{counter-increment:st;display:grid;grid-template-columns:22px 1fr}
+.prog ol li::before{content:counter(st) ".";color:var(--muted)}
+.ghead{font-size:15px;font-weight:600;color:var(--muted);margin:10px 0 0;letter-spacing:0}
+.phone{display:inline-flex;flex-wrap:wrap;gap:2px 8px;align-items:center;max-width:100%;color:var(--ink);text-decoration:none;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:var(--r-ctl);padding:6px 10px;font-size:14px;margin:4px 6px 0 0}
+.phone code{font-family:inherit;font-weight:700;white-space:nowrap;color:var(--act)}
+@media (hover:hover){a.phone:hover{box-shadow:inset 0 0 0 1.5px var(--act)}}
+.phone button{border:0;background:var(--fill-2);border-radius:6px;padding:3px 8px;font-size:13px;cursor:pointer}
+.srow{display:grid;gap:4px;padding:12px 0;border-bottom:1px solid var(--line)}
+.srow:last-child{border-bottom:0}
+.sh{display:flex;justify-content:space-between;gap:6px 14px;flex-wrap:wrap}
+.chartwrap{position:relative;background:var(--surface);border-radius:var(--r-ctl);padding:10px 8px 4px}
+.chartwrap svg{width:100%;height:auto;display:block;font-family:var(--font)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend i.dash{width:16px;height:0;border-top:2px dashed var(--ink);border-radius:0;vertical-align:3px}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;box-shadow:0 6px 18px rgba(0,0,0,.14);min-width:160px;z-index:2}
+.acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.card details.more{border-top:0;padding:0}
+details.more{border-top:1px solid var(--line);padding:14px 0}
+details.more > summary{cursor:pointer;font-weight:600}
+.foot{max-width:1180px;margin:56px auto 0;display:grid;gap:4px}
+.foot .fine{font-size:13px;color:var(--muted)}
+.foot .twrap table{font-size:14px}
+.rate{display:grid;gap:3px;font-size:14px;color:var(--muted)}
+.rate b{color:var(--ink)}
+.tl{list-style:none;margin:0;padding:0;display:grid}
+.tl li{position:relative;padding:0 0 18px 32px;display:grid;gap:2px}
+.tl li::before{content:"";position:absolute;left:4px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--act);box-shadow:0 0 0 4px var(--act-soft)}
+.tl li::after{content:"";position:absolute;left:10px;top:24px;bottom:2px;width:2px;background:var(--act-soft)}
+.tl li:last-child{padding-bottom:0} .tl li:last-child::after{display:none}
+.tl .k{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tl .v{font-size:22px;font-weight:var(--w-head);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tl .d{font-size:14px;color:var(--muted)}
+@media (min-width:760px){.tl.h{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.tl.h li{padding:32px 0 0}.tl.h li::before{left:0;top:0}.tl.h li::after{left:24px;right:-12px;top:6px;bottom:auto;width:auto;height:2px}.tl.h li:last-child::after{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.house .sm{opacity:.8}}
+</style>
+
+<header class="top"><div class="topin">
+  <button type="button" class="brand" id="brand">Stoughton Energy Help</button>
+  <button type="button" class="lookbtn" id="lookbtn" aria-expanded="false" aria-controls="looks" hidden><i></i>Design<span class="lbl2">&nbsp;options</span></button>
+  <button type="button" class="linkbtn" id="restart">Start over</button>
+</div><div class="looks" id="looks" hidden></div></header>
+
+<main id="app"></main>
+
+<footer class="foot">
+  <details class="more" id="sessions"><summary>Free library sessions</summary>
+    <p class="hint" style="margin:10px 0">Stoughton Public Library, 84 Park St, Community Room. Wednesdays 6:30–7:45 pm. <span id="roomflag">Dates pending library room approval.</span></p>
+    <div class="twrap"><table id="sched"></table></div>
+  </details>
+  <details class="more"><summary>Where to apply</summary><div id="phones" style="margin-top:10px"></div></details>
+  <details class="more"><summary>How the numbers work</summary>
+    <div style="display:grid;gap:14px;margin-top:10px;max-width:760px">
+      <div class="rate">
+        <span>Regular National Grid price: <b>39.5¢/kWh</b> = supply 17.2 + distribution 10.4 + transmission 5.5 + other charges 6.4.</span>
+        <span>Heat Pump Rate, Nov 1–Apr 30, on all your electricity: distribution <b>4.2¢ lower</b>, and from Nov 1, 2026 transmission <b>about 3.5¢ lower</b>. Winter price <b>31.8¢</b>.</span>
+      </div>
+      <div class="twrap"><table>
+        <thead><tr><th>Cost of the same heat (1 million BTU), winter 2026–27</th><th class="r">$</th></tr></thead>
+        <tbody>
+          <tr><td>Gas, new condensing (95%)</td><td class="r">27</td></tr>
+          <tr><td>Gas, older furnace or boiler (80%)</td><td class="r">32</td></tr>
+          <tr><td>Oil at last winter's $4.09/gal</td><td class="r">36</td></tr>
+          <tr><td>Heat pump, ductless, whole season (COP 2.4)</td><td class="r">39</td></tr>
+          <tr><td>Heat pump, ducted with strip heat, whole season (COP 2.1)</td><td class="r">45</td></tr>
+          <tr><td>Propane at $3.62/gal</td><td class="r">47</td></tr>
+          <tr><td>Heat pump, ducted, Dec–Feb (COP 1.95)</td><td class="r">48</td></tr>
+          <tr><td>Oil at $6.15/gal</td><td class="r">53</td></tr>
+          <tr><td>Heat pump, ducted, NOT on the Heat Pump Rate</td><td class="r">56</td></tr>
+          <tr><td>Heat pump, coldest hours −10 to −5°F (COP 1.2)</td><td class="r">78</td></tr>
+          <tr><td>Electric strip heat (COP 1)</td><td class="r">93</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="hint" style="margin:0;padding-left:18px;display:grid;gap:4px">
+        <li>Heat pump COPs come from an hour-by-hour model of a typical Norwood year: COP and capacity drop below freezing, the unit runs as an air conditioner a few minutes an hour to defrost (about 173 hours a year), and strip heat covers defrost and the coldest hours. Field studies agree: about 2.0 for ducted systems in Massachusetts.</li>
+        <li>If you type your bills, the page works backwards from them. Oil or propane: dollars ÷ price = gallons, minus hot water (about 144 gallons of oil or 219 of propane a year). Gas: (bill − $12.20) × 12 ÷ $2.60 = therms, minus 200 for hot water. Electric: (bill − $10) × 12 ÷ 39.5¢ = kWh, minus cooling (and minus heat and hot water in electric-heat homes). Gasoline: dollars ÷ $/gallon × mpg = miles.</li>
+        <li>No bills typed: house size sets the heat, small 40, medium 64, large 90 million BTU a year (medium = 800 therms of gas or 560 gallons of oil), and other electricity is 600 kWh a month.</li>
+        <li>Insulation cuts heating 15%; Mass Save pays about 90% of it (100% for income-eligible homes). Hot water 12 million BTU a year; old tank 60% (fuel) or 92% (electric); heat pump water heater COP 2.5. Washer-dryer saves 350 kWh a year; old fridge pickup 700 kWh.</li>
+        <li>Solar 1,200 kWh per kW a year, 60% in May–Oct. Solar you use saves your full price; extra becomes credits worth about 33¢; credits can't pay the $10 monthly connection fee, so a net-zero house still pays that. SMART about 3¢ per kWh. Battery: ConnectedSolutions about $1,100 a year. Geothermal: $65,000–75,000 installed with drilling (we use $70,000), season COP 3.2.</li>
+        <li>Loans: HEAT Loan 0%, up to $25,000, 7 years, for insulation, heat pumps, heat pump water heaters and batteries; apply before the work is installed. Energy Saver Home Loan 0.5% (income up to $124,000) or 2% (up to $209,250), $10,000–$100,000, 20 years, first 18 months interest only; owner-occupied 1–4 units; about 45 days to close.</li>
+        <li>Cooling per year: window units 700 kWh, central AC 1,500 kWh; with a heat pump 1,200 kWh (geothermal 900), because a home without central AC usually starts cooling every room.</li>
+        <li>Oil defaults to last winter's average, $4.09 a gallon (this week: $6.15). Gas $2.60 a therm in winter. Propane $3.62.</li>
+        <li>Electric car: your miles and mpg, gasoline $4.39 a gallon (AAA, Sept 18, 2026); the EV goes 3.3 miles per kWh with 10% charging loss, charged at home; Off-Peak Charging credit about 3.7¢ per kWh on average. Car price not included.</li>
+        <li>Supplier: National Grid Basic Service 17.19¢ (Aug 2026–Jan 2027) or the town program 14.34¢ (until the Nov 2026 meter reads; the next price isn't posted).</li>
+        <li>Buy with neighbors: a company owns the geothermal, battery or solar for 5 years (the credit's recapture period) and claims the federal commercial credit, 30% for small projects plus a 10% bonus for U.S.-made content, on the cost after rebates. About half reaches the homeowner (credits sell at a discount and the company keeps a share). You keep paying about what you pay today (lease plus bills), then buy it back at year 5 for the balance left (cash, or over 15 years at your bank's rate) and own it. With solar sized to your use, what's left after that is the $10 connection fee. Solar only if running by Dec 31, 2027; batteries must meet the new foreign-supplier rules.</li>
+        <li>Electricity bills show supply and delivery separately. Delivery is 22.3¢ a kWh plus $10 a month whoever supplies you; the Heat Pump Rate lowers delivery Nov–Apr. Gas $2.60 a therm includes supply and delivery, plus $12.20 a month.</li>
+        <li>Today's prices, no inflation. Not counted: maintenance, resale value, a colder or warmer winter.</li>
+      </ul>
+    </div>
+  </details>
+  <details class="more"><summary>Sources</summary><ul class="hint" id="sources" style="margin:10px 0 0;padding-left:18px;display:grid;gap:6px">
+    <li><a href="https://www.masssave.com/residential/rebates-and-incentives/heating-and-cooling/heat-pumps/air-source-heat-pumps" target="_blank" rel="noopener">Mass Save heat pump rebates</a> and <a href="https://www.masssave.com/residential/rebates-offers-services/income-based-offers/save-with-enhanced-incentives" target="_blank" rel="noopener">income-based offers</a></li>
+    <li><a href="https://www.masssave.com/residential/rebates-offers-services/appliances-and-products" target="_blank" rel="noopener">Mass Save appliances</a>, <a href="https://www.masssave.com/residential/rebates-offers-services/water-heating/heat-pump-water-heaters" target="_blank" rel="noopener">water heaters</a>, <a href="https://www.masssave.com/residential/rebates-offers-services/financing" target="_blank" rel="noopener">HEAT Loan</a></li>
+    <li><a href="https://www.nationalgridus.com/MA-Home/Payment-Assistance-Programs/Discount-Rates" target="_blank" rel="noopener">National Grid discount rates</a>, <a href="https://www.nationalgridus.com/MA-Home/Bill-Help/Arrears-Management-Program" target="_blank" rel="noopener">arrears management</a>, <a href="https://www.nationalgridus.com/MA-Home/Rates/Heat-Pump-Rate" target="_blank" rel="noopener">Heat Pump Rate</a></li>
+    <li><a href="https://www.nationalgridus.com/media/pdfs/billing-payments/electric-rates/ma/resitable.pdf" target="_blank" rel="noopener">National Grid Basic Service prices</a> and <a href="https://www.nationalgridus.com/media/pdfs/billing-payments/tariffs/mae/meco_delivery.pdf" target="_blank" rel="noopener">delivery charges</a></li>
+    <li>Heat Pump Rate: <a href="https://www.mass.gov/info-details/residential-electric-seasonal-heat-pump-rates" target="_blank" rel="noopener">mass.gov seasonal heat pump rates</a> (distribution 4.2¢ lower); lower transmission from Nov 1, 2026, approved by the DPU in July 2026 (<a href="https://www.canarymedia.com/articles/heat-pumps/massachusetts-increase-winter-heat-pump-rates" target="_blank" rel="noopener">Canary Media, Sept 17, 2026</a>)</li>
+    <li><a href="https://colonialpowergroup.com/stoughton/" target="_blank" rel="noopener">Stoughton town electricity program (Colonial Power)</a></li>
+    <li><a href="https://selfhelpinc.org/program-services/fuel-energy/" target="_blank" rel="noopener">Self Help Inc. fuel assistance</a></li>
+    <li><a href="https://www.masshousing.com/-/media/Emasshousing/ESHLP/ESHLP-Income-Limits.pdf" target="_blank" rel="noopener">Energy Saver Home Loan income limits</a></li>
+    <li><a href="https://www.nationalgridus.com/MA-Home/Connected-Solutions/BatteryProgram" target="_blank" rel="noopener">ConnectedSolutions batteries</a>, <a href="https://www.mass.gov/info-details/smart-30-program-details" target="_blank" rel="noopener">SMART 3.0 solar</a>, <a href="https://www.mass.gov/info-details/community-solar-css" target="_blank" rel="noopener">community solar</a></li>
+    <li><a href="https://www.nationalgridus.com/electric-vehicle-hub/Programs/Massachusetts/EV-Charging-Upgrade-Program" target="_blank" rel="noopener">National Grid EV charger rebates</a>, <a href="https://www.nationalgridus.com/electric-vehicle-hub/Programs/Massachusetts/Off-Peak-Charging-Program" target="_blank" rel="noopener">Off-Peak Charging</a>, <a href="https://mor-ev.org/eligibility" target="_blank" rel="noopener">MOR-EV</a></li>
+    <li><a href="https://www.irs.gov/newsroom/faqs-for-modification-of-sections-25c-25d-25e-30c-30d-45l-45w-and-179d-under-public-law-119-21-139-stat-72-july-4-2025-commonly-known-as-the-one-big-beautiful-bill-obbb" target="_blank" rel="noopener">IRS: federal credits that ended in 2025–2026</a>; <a href="https://www.law.cornell.edu/uscode/text/26/48E" target="_blank" rel="noopener">26 U.S.C. §48E</a> and <a href="https://www.law.cornell.edu/uscode/text/26/48" target="_blank" rel="noopener">§48</a></li>
+    <li><a href="https://www.zonoliteatticinsulation.com/FAQs" target="_blank" rel="noopener">Zonolite Attic Insulation Trust</a></li>
+    <li><a href="https://www.mass.gov/info-details/massachusetts-home-heating-fuels-prices" target="_blank" rel="noopener">Massachusetts heating oil and propane prices</a>; <a href="https://www.masscec.com/resources/cold-climate-air-source-heat-pump-building-electrification-study-2020-2021" target="_blank" rel="noopener">Cadmus heat pump field study</a></li>
+    <li><a href="https://www.masscec.com/resources/solarize-heat-smart-toolkit" target="_blank" rel="noopener">MassCEC group-buying toolkit</a></li>
+    <li><a href="https://www.masshousing.com/-/media/MCCB/ESHLP-Program-Guide.pdf" target="_blank" rel="noopener">Energy Saver Home Loan program guide</a>; <a href="https://www.masssave.com/frequently-asked-questions" target="_blank" rel="noopener">Mass Save FAQ (HEAT Loan rules)</a>; <a href="https://www.mass.gov/info-details/heating-system-repair-replacement-program-heartwap" target="_blank" rel="noopener">HEARTWAP emergency heating repair</a></li>
+    <li>Heat pump winter cost: hour-by-hour model using <a href="https://climate.onebuilding.org/" target="_blank" rel="noopener">Norwood TMYx 2007–2021 weather</a> and field data from <a href="https://ma-eeac.org/wp-content/uploads/MA-HPMS-CT-R2246-Heat-Pump-Metering-Study-Final-Report_August_2024.pdf" target="_blank" rel="noopener">Guidehouse 2024</a>, <a href="https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-37127.pdf" target="_blank" rel="noopener">PNNL-37127</a>, <a href="https://www.efficiencymaine.com/docs/Efficiency_Maine_Residential_Heat_Pump_Impact_Evaluation_Report-2024.pdf" target="_blank" rel="noopener">Efficiency Maine 2024</a>; installed costs from the <a href="https://ma-eeac.org/wp-content/uploads/MA25X05-BR-RHPINV2_Res-HP-Invoice-Cost-Report_Final_2026.03.06.pdf" target="_blank" rel="noopener">2026 Mass Save heat pump invoice study</a></li>
+  </ul></details>
+  <p class="fine">Draft by the Stoughton Energy &amp; Sustainability Committee. Not an official Town of Stoughton website. Nothing you enter leaves this page. The programs decide eligibility; amounts checked September 24, 2026. Committee: <a href="https://www.stoughton.org/536/Energy-Sustainability-Committee" target="_blank" rel="noopener">stoughton.org/536</a> · <a href="https://www.facebook.com/stoughtonesc/" target="_blank" rel="noopener">facebook.com/stoughtonesc</a>. Meetings: 1st and 3rd Thursday, 7 pm, at the library.</p>
+</footer>
+
+<script>
+(function(){
+"use strict";
+/* ---------- sourced constants (checked 2026-09-24) ---------- */
+// Mass Save 2025-26 income limits by household size 1..8 (Income Eligible <= 60% SMI; Enhanced upper = 80%)
+const LOW = [51777,67709,83641,99573,115504,131436,134423,137410];
+const MOD = [69036,90279,111522,132764,154006,175248,179231,183214];
+// Fuel assistance FY2027 income limits, household size 1..6 (Self Help Inc.)
+const FA  = [53585,70073,86561,103049,119536,136024];
+// Energy Saver Home Loan, Norfolk County (effective 6/15/2026)
+const ESHL_LOW = 124000, ESHL_MAX = 209250;
+const ROOM_CONFIRMED = false;
+const TODAY = new Date();
+const before = (y,m,d) => TODAY < new Date(y, m-1, d, 23, 59, 59);
+const money = n => "$" + Math.round(n).toLocaleString("en-US");
+
+const C = {
+  colonial:["Town electricity program","stoughton.org/396","https://www.stoughton.org/396/Community-Choice-Power-Supply"],
+  ngrid:["National Grid","nationalgridus.com","https://www.nationalgridus.com"],
+  ngamp:["National Grid bill help and arrears program","nationalgridus.com","https://www.nationalgridus.com"],
+  eversourceE:["Eversource","eversource.com","https://www.eversource.com"],
+  egma:["Eversource Gas discount and payment help","eversource.com","https://www.eversource.com"],
+  selfhelp:["Self Help Inc. fuel assistance","selfhelpinc.org","https://selfhelpinc.org/program-services/fuel-energy/"],
+  coa:["Stoughton Council on Aging, 110 Rockland St","stoughton.org/355","https://www.stoughton.org/355/Council-on-Aging"],
+  masssave:["Mass Save home energy assessment","masssave.com","https://www.masssave.com"],
+  ie:["Mass Save income-eligible program","masssave.com","https://www.masssave.com"],
+  building:["Stoughton Building Department","stoughton.org/163","https://www.stoughton.org/163/Building-Department"],
+  fire:["Stoughton Fire Department","stoughton.org","https://www.stoughton.org"],
+  stoco:["HEAT Loan and participating lenders","myheatloan.com","https://www.myheatloan.com"],
+  cet:["Energy Saver Home Loan","masshousing.com","https://www.masshousing.com"],
+  shenergy:["Self Help Inc. energy programs","selfhelpinc.org","https://selfhelpinc.org/program-services/fuel-energy/"],
+  esc:["Stoughton Energy & Sustainability Committee","stoughton.org/536","https://www.stoughton.org/536/Energy-Sustainability-Committee"],
+};
+const SCHED = [
+  ["Wed Oct 21, 2026","Read your bill and pay less for the same power"],
+  ["Wed Oct 28, 2026","Help paying your energy bills this winter"],
+  ["Wed Nov 4, 2026","Your free home energy assessment"],
+  ["Wed Nov 18, 2026","Heat pumps: the real winter cost before you sign"],
+  ["Wed Dec 2, 2026","Paying for a new heating or cooling system"],
+  ["Wed Dec 9, 2026","Hot water, kitchen and laundry"],
+  ["Wed Dec 16, 2026","Geothermal: heat from the ground under your feet"],
+  ["Wed Jan 6, 2027","Solar: is your roof worth it?"],
+  ["Wed Jan 13, 2027","Batteries and backup power"],
+  ["Wed Jan 20, 2027","Electric cars, home charging, home value and your plan"],
+  ["Wed Jan 27, 2027, 6:30–8:00 pm","Energy Night: final presentation, your plan, and group-buying next steps", true],
+];
+const STAR = "Federal tax credits for homeowners ended after 2025. Commercial credits still exist when a company owns the equipment on your home (lease, PPA or service plan): up to 30% for geothermal and batteries, and for rooftop solar only if it is running by Dec 31, 2027. Neighbors buying together may be able to negotiate for some of that value as a lower price. Interested? Tell us at a library session or on facebook.com/stoughtonesc.";
+
+/* Whole-package model: every upgrade a household picks -> cost, rebates, yearly bills, loans, monthly total.
+
+/* Whole-package model: every upgrade a household picks -> cost, rebates, credits, yearly bills, loans, monthly total.
+   Same formulas as the Excel "Everything New" tab. National Grid R-1, Stoughton, prices checked Sept 2026. */
+const PKG = {
+  supplyBasic: 0.17185,  // National Grid Basic Service, fixed Aug 2026-Jan 2027
+  supplyTown: 0.1434,    // Stoughton town program (Direct Energy), until the Nov 2026 meter reads
+  dStd: 0.22327,         // delivery, standard: distribution 10.422 + transmission 5.464 + other 6.441 (cents)
+  dHpw: 0.14626,         // delivery on the Heat Pump Rate Nov-Apr from Nov 1, 2026: distribution 6.185 + transmission ~2.0 + other 6.441
+  dCredit: 0.15857,      // net-metering credit for extra solar kWh, delivery part: distribution + transmission + transition (-0.029)
+  elecCust: 10, gasCust: 12.20,
+  smart: 0.030,          // SMART payment per solar kWh (about $290/yr for 8 kW)
+  solarYield: 1200, solarSummer: 0.60,
+  cs: 1100,              // ConnectedSolutions battery payment per year
+  wxSave: 0.15,          // insulation + air sealing: share of heating saved
+  hwMMBtu: 12, hwEffFuel: 0.60, hwEffElec: 0.92, hpwhCop: 2.5,
+  laundryKwh: 350, fridgeKwh: 700, geoCop: 3.2,
+  cool: { none: 0, window: 700, central: 1500, hp: 1200, geo: 900 },   // cooling kWh per year
+  ev: { miPerKwh: 3.3, chargeEff: 0.90, offPeak: 0.037 },              // off-peak credit: 5¢ Jun-Sep, 3¢ rest of year
+  itcBase: 0.30, itcBonus: 0.10, depTax: 0.273, macrs: [0.20, 0.32, 0.192, 0.1152, 0.1152, 0.0576],                                        // commercial credit (company-owned): 30% + 10% bonus
+  leaseYears: 5, buyoutYears: 15,                                       // group lease: company owns 5 years (credit recapture period), then you buy it
+  btu: { gas: 100000, oil: 138500, propane: 91452, electric: 3412 },
+};
+PKG.std = PKG.supplyBasic + PKG.dStd;     // 39.5¢
+PKG.hpw = PKG.supplyBasic + PKG.dHpw;     // 31.8¢
+PKG.credit = PKG.supplyBasic + PKG.dCredit;
+const ITEMS = [
+  { id: "wx", name: "Insulation and air sealing", cost: 8000, heat: true },
+  { id: "hp", name: "Whole-home heat pump (air-source)", cost: 25000, heat: true },
+  { id: "geo", name: "Geothermal heat pump", cost: 70000, heat: true, itc: true },   // $65,000–75,000 installed, drilling included
+  { id: "hpwh", name: "Heat pump water heater", cost: 3200, heat: true },
+  { id: "solar", name: "Rooftop solar", cost: 23000, heat: false, itc: true },
+  { id: "battery", name: "Home battery", cost: 16000, heat: true, itc: true },
+  { id: "panel", name: "Electrical panel upgrade", cost: 3500, heat: false },
+  { id: "ev", name: "Electric car", cost: 0, heat: false, car: true },
+  { id: "evc", name: "Home EV charger", cost: 1800, heat: false },
+  { id: "induction", name: "Induction stove", cost: 2000, heat: false },
+  { id: "laundry", name: "Heat pump washer-dryer", cost: 2100, heat: false },
+  { id: "fridge", name: "Old fridge or freezer pickup", cost: 0, heat: false },
+];
+function rebateFor(id, cost, x) {
+  const fossilSwap = ["oil", "propane", "electric"].includes(x.fuel);
+  switch (id) {
+    case "wx": return cost * (x.tier === "low" ? 1 : 0.90);   // Mass Save advertises 75-100%; about 90% in practice, 100% income-eligible
+    case "hp": return x.tier === "low" && fossilSwap ? cost : Math.min(cost, x.tier === "moderate" && fossilSwap ? 16000 : 8500);
+    case "geo": return Math.min(cost, x.tier === "low" || x.tier === "moderate" ? 25000 : 13500);
+    case "hpwh": return Math.min(cost, 750);
+    case "induction": return Math.min(cost, 500);
+    case "laundry": return Math.min(cost, 350);
+    case "fridge": return 75;
+    case "evc": return x.evcRebate ? Math.min(cost, 700) : 0;
+    default: return 0;
+  }
+}
+const pmt = (r, n, p) => (p <= 0 || n <= 0) ? 0 : (r === 0 ? p / n : p * (r / 12) / (1 - Math.pow(1 + r / 12, -n)));
+
+function pkgModel(x) {
+  const P = PKG, on = x.on, fuel = x.fuel, btu = P.btu[fuel];
+  const sup = x.supply != null ? x.supply : P.supplyBasic;
+  const std = sup + P.dStd, hpw = sup + P.dHpw, credit = sup + P.dCredit;
+  const hpNow = !!x.hpNow, useGeo = !!on.geo, useHp = !!on.hp && !on.geo && !hpNow, onHP = useGeo || useHp || hpNow;
+  const w1 = onHP ? hpw : std;
+  const ev = x.ev || { miles: 12000, mpg: 28, gas: 4.39 };
+  // ---------- before ----------
+  const H0 = x.amt * btu * x.eff / 1e6;                   // heat delivered, million BTU
+  const waterFuel = fuel === "electric" ? "electric" : fuel;
+  const waterUnits0 = waterFuel === "electric" ? P.hwMMBtu * 1e6 / 3412 / P.hwEffElec : P.hwMMBtu * 1e6 / (btu * P.hwEffFuel);
+  const base0 = x.baseKwh * 12;
+  const cool0 = hpNow ? P.cool.hp : (P.cool[x.cool || "none"] || 0);
+  const heatKwh0 = fuel === "electric" ? x.amt : 0;
+  const nh0 = base0 + (waterFuel === "electric" ? waterUnits0 : 0);   // half in winter, half in summer
+  const gross0 = (nh0 + heatKwh0 + cool0) * std;
+  const hpDisc0 = hpNow ? (nh0 * 0.5 + heatKwh0) * (std - hpw) : 0;
+  const elec0 = P.elecCust * 12 + gross0 - hpDisc0;
+  const kwh0 = nh0 + heatKwh0 + cool0, supply0 = kwh0 * sup, deliv0 = P.elecCust * 12 + kwh0 * P.dStd - hpDisc0;
+  const fuel0 = fuel === "electric" ? 0 : (x.amt + waterUnits0) * x.price;
+  const gas0 = fuel === "gas" ? P.gasCust * 12 : 0;
+  const gasoline0 = on.ev ? ev.miles / ev.mpg * ev.gas : 0;
+  const bills0 = elec0 + fuel0 + gas0 + gasoline0;
+  // ---------- after ----------
+  const H1 = H0 * (on.wx ? 1 - P.wxSave : 1);
+  const cop = useGeo ? P.geoCop : (hpNow ? x.eff : x.cop);
+  const heatKwh1 = onHP ? H1 * 1e6 / 3412 / cop : (fuel === "electric" ? H1 * 1e6 / 3412 : 0);
+  const heatUnits1 = onHP || fuel === "electric" ? 0 : H1 * 1e6 / (btu * x.eff);
+  const waterKwh1 = on.hpwh ? P.hwMMBtu * 1e6 / 3412 / P.hpwhCop : (waterFuel === "electric" ? waterUnits0 : 0);
+  const waterUnits1 = on.hpwh || waterFuel === "electric" ? 0 : waterUnits0;
+  const base1 = base0 - (on.laundry ? P.laundryKwh : 0) - (on.fridge ? P.fridgeKwh : 0);
+  const cool1 = useGeo ? P.cool.geo : (onHP ? P.cool.hp : cool0);
+  const evKwh = on.ev ? ev.miles / P.ev.miPerKwh / P.ev.chargeEff : 0;
+  const nh1 = base1 + waterKwh1 + evKwh;
+  const gross1 = (nh1 + heatKwh1 + cool1) * std;
+  const hpDisc1 = onHP ? (nh1 * 0.5 + heatKwh1) * (std - hpw) : 0;
+  const evCredit = evKwh * P.ev.offPeak;
+  const energy1 = gross1 - hpDisc1 - evCredit;
+  const kwh1 = nh1 + heatKwh1 + cool1, supply1 = kwh1 * sup, deliv1 = P.elecCust * 12 + kwh1 * P.dStd - hpDisc1;
+  const S = on.solar ? x.kw * P.solarYield : 0;
+  const sumUse = nh1 * 0.5 + cool1, winUse = nh1 * 0.5 + heatKwh1;
+  const prodS = S * P.solarSummer, prodW = S - prodS;
+  // solar kWh used in the same month save your full price; extra kWh become credits; credits can't pay the $10 connection fee
+  const solarValue = Math.min(energy1,
+      Math.min(sumUse, prodS) * std + Math.max(0, prodS - sumUse) * credit
+    + Math.min(winUse, prodW) * w1 + Math.max(0, prodW - winUse) * credit);
+  const smart = S * P.smart;
+  const cs = on.battery ? P.cs : 0;
+  const elec1 = P.elecCust * 12 + energy1 - solarValue - smart - cs;
+  const fuel1 = (heatUnits1 + waterUnits1) * x.price;
+  const gasGone = fuel === "gas" && onHP && on.hpwh && on.induction;
+  const gas1 = fuel === "gas" && !gasGone ? P.gasCust * 12 : 0;
+  const bills1 = elec1 + fuel1 + gas1;
+  // ---------- items ----------
+  const g = x.group || { on: false, price: 0.90, bonus: true, rate: 0.07 };
+  // group lease: the company claims the full credit on the cost after rebates; it lowers the buy-back, not the sticker price
+  const itcRate = g.on ? P.itcBase + (g.bonus ? P.itcBonus : 0) : 0;
+  const rows = ITEMS.filter(it => on[it.id] && !it.car && !(it.id === "hp" && (useGeo || hpNow))).map(it => {
+    const cost = it.id === "solar" ? (x.cost.solar != null ? x.cost.solar : x.kw * 2875) : (x.cost[it.id] != null ? x.cost[it.id] : it.cost);
+    const reb = rebateFor(it.id, cost, { fuel, tier: x.tier, evcRebate: x.evcRebate });
+    const itc = it.itc ? itcRate * Math.max(0, cost - reb) : 0;
+    return { id: it.id, name: it.name, cost, rebate: reb, itc, net: cost - reb, heat: it.heat, lease: !!(g.on && it.itc) };
+  });
+  const leaseAmt = Math.max(0, rows.filter(r => r.lease).reduce((a, r) => a + r.net, 0));
+  const total = Math.max(0, rows.filter(r => !r.lease).reduce((a, r) => a + r.net, 0));
+  // group lease (company-owned for 5 years, then you buy it back):
+  //  the company pays the cost after rebates, sells the credit (price per $1), takes 5-year tax depreciation,
+  //  and earns the lease rate on the rest. The buy-back at year 5 is what it still has in the equipment.
+  //  "today": you keep paying what you pay today; after the new bills and your other loans, the rest goes to the lease
+  //  "level": a level payment as if 20 years at the lease rate
+  const lr = g.rate != null ? g.rate : 0.07, nL = P.leaseYears * 12, nAll = (P.leaseYears + P.buyoutYears) * 12, il = lr / 12;
+  const price = g.price != null ? g.price : 0.90;
+  const growth = Math.pow(1 + il, nL), F = il === 0 ? nL : (growth - 1) / il;
+  const netInv = leaseAmt * (1 - itcRate * price), basis = leaseAmt * (1 - itcRate / 2);
+  const M = P.macrs, dep = P.depTax * basis;
+  const depFV = dep * (M[0] * Math.pow(1 + il, 48) + M[1] * Math.pow(1 + il, 36) + M[2] * Math.pow(1 + il, 24) + M[3] * Math.pow(1 + il, 12) + M[4]) + dep * M[5] / (1 + lr);
+  const balance = pay => netInv * growth - pay * F - depFV;
+  function leaseFor(baseAt40) {
+    if (leaseAmt <= 0) return { amt: 0, pay: 0, buyout: 0, buyoutPay: 0, add: 0, rate: lr, credit: 0, depr: 0, monthly: () => 0 };
+    const full5 = Math.max(0, balance(0) / F);                 // pays it all off in 5 years
+    const pay = g.mode === "level" ? pmt(lr, nAll, netInv - depFV / growth) : Math.max(0, Math.min(full5, (bills0 - bills1) / 12 - baseAt40));
+    const buyout = Math.max(0, balance(pay));
+    const buyoutPay = pmt(x.otherRate, P.buyoutYears * 12, buyout);
+    return { amt: leaseAmt, pay, buyout, buyoutPay, add: Math.max(0, full5 - pay), rate: lr, credit: itcRate * leaseAmt, depr: dep * M.reduce((a, b) => a + b, 0), monthly: m => (m <= nL ? pay : m <= nAll ? buyoutPay : 0) };
+  }
+  const heatElig = Math.max(0, rows.filter(r => r.heat && !r.lease).reduce((a, r) => a + Math.max(0, r.net), 0));
+  const stateCredit = on.solar ? Math.min(1000, 0.15 * (rows.find(r => r.id === "solar") || { cost: 0 }).cost) : 0;
+  // ---------- loans ----------
+  const eshlOK = x.eshlRate != null;
+  function plan(kind) {
+    let heat = 0, eshl = 0, other = 0, avail = true;
+    if (kind === "A") {
+      heat = Math.min(25000, heatElig, total);
+      const rest = total - heat;
+      if (eshlOK && rest >= 10000) { eshl = Math.min(rest, 100000); other = rest - eshl; } else other = rest;
+    } else if (kind === "B") {
+      if (eshlOK && total >= 10000) { eshl = Math.min(total, 100000); other = total - eshl; } else { avail = false; other = total; }
+    } else other = total;
+    const n = Math.round(x.otherYears * 12), r = x.otherRate, re = x.eshlRate || 0;
+    const heatPay = heat / 84, eshlIO = eshl * re / 12, eshlPay = pmt(re, 222, eshl), otherPay = pmt(r, n, other);
+    const base = m => (m <= 84 ? heatPay : 0) + (eshl > 0 ? (m <= 18 ? eshlIO : m <= 240 ? eshlPay : 0) : 0) + (m <= n ? otherPay : 0);
+    const lease = leaseFor(base(40));
+    const monthly = m => base(m) + lease.monthly(m);
+    const years = [];
+    let paid = 0;
+    for (let y = 1; y <= 25; y++) { let s = 0; for (let m = (y - 1) * 12 + 1; m <= y * 12; m++) s += monthly(m); years.push(s / 12); paid += s; }
+    const lastMonth = Math.max(heat > 0 ? 84 : 0, eshl > 0 ? 240 : 0, other > 0 ? n : 0, lease.buyout > 0 ? nAll : (leaseAmt > 0 ? nL : 0));
+    let loanPaid = 0; for (let m = 1; m <= 300; m++) loanPaid += base(m);
+    return { kind, avail, heat, eshl, other, heatPay, eshlIO, eshlPay, otherPay, years, paid, interest: loanPaid - total, lastMonth, monthly, lease };
+  }
+  const plans = { A: plan("A"), B: plan("B"), C: plan("C") };
+  return { H0, H1, heatKwh1, bills0, bills1, elec0, fuel0, gas0, gasoline0, elec1, fuel1, gas1, gasGone, gross0, gross1, hpDisc0, hpDisc1, evCredit, evKwh,
+    solarValue, smart, cs, S, rows, total, heatElig, stateCredit, plans, onHP, std, hpw, cop, kwh0, kwh1, cool0, cool1, supply0, deliv0, supply1, deliv1, leaseAmt, sup };
+}
+
+/* ---------- eligibility logic ---------- */
+function incomeTier(s){
+  if (s.income === null) return "unknown";
+  const i = Math.min(Math.max(s.size,1),8) - 1;
+  if (s.income <= LOW[i]) return "low";
+  if (s.income <= MOD[i]) return "moderate";
+  return "standard";
+}
+function programs(s){
+  const P = [];
+  const tier = incomeTier(s);
+  const owner = s.tenure === "own";
+  const smallBldg = s.building === "single" || s.building === "small";
+  const hasBenefit = s.benefits.length > 0;
+  const discountOK = hasBenefit || tier === "low";
+  const ng = s.utility !== "eversource";
+  const has = k => s.int.includes(k);
+  const fossilSwap = ["oil","propane","electric"].includes(s.heat);
+  const add = o => P.push(o);
+
+  // 1. Bill discount
+  if (discountOK) add({ id:"discount", pr:1, st:"yes", title:"Utility discount rate",
+    get: ng ? "National Grid takes 32%–71% off your electric bill (by income). Eversource Gas takes 25% off gas." : "Eversource takes a discount off your electric bill, and Eversource Gas takes 25% off gas.",
+    why: (hasBenefit ? "You get a benefit that counts as proof (SNAP, MassHealth, SSI, TAFDC, fuel assistance or ConnectorCare)." : "Your income is at or under 60% of state median income for your household size.") + " New income-based discount levels start Nov 1, 2026." + (s.billsmine ? "" : " The bill must be in a household member's name."),
+    steps: [hasBenefit ? "Apply for the discount rate online, or ask the utility. Have your account number and proof of benefits ready." : "Apply for the discount rate online, or ask the utility. Have your account number and proof of income ready.", hasBenefit ? "Your benefit letter is usually enough for the first discount level." : "Apply for fuel assistance too: that application also sets your discount level.", "Check your next bill: the rate code should change from R-1 to R-2."],
+    contacts: [ng ? C.ngrid : C.eversourceE, C.egma] });
+  else if (tier === "moderate") add({ id:"discount", pr:9, st:"info", title:"Utility discount rate",
+    get:"Not likely at your income right now.", why:"Discounts go to households at or under 60% of state median income or on SNAP, MassHealth and similar benefits. If your income drops, check again.", steps:[], contacts:[] });
+
+  // 2. Fuel assistance
+  const faLimit = s.size <= 6 ? FA[s.size-1] : null;
+  if (s.income !== null && faLimit && s.income <= faLimit) add({ id:"fuel", pr:1, st:"yes", title:"Fuel assistance (heating help)",
+    get:"Help paying for heat from Nov 1 to Apr 30, whatever fuel you use. Renters can apply too.",
+    why:"Your income is under the 2026–27 limit of " + money(faLimit) + " for " + s.size + (s.size>1?" people.":" person."),
+    steps:["Apply with Self Help Inc. at selfhelpinc.org (applications opened Oct 1).", s.senior ? "Residents 60+ or with a disability can apply at the Council on Aging by appointment." : "Bring ID, proof of income for everyone, and a recent heating bill.", "Approval also qualifies you for utility discounts and no-cost Mass Save upgrades."],
+    contacts: s.senior ? [C.selfhelp, C.coa] : [C.selfhelp] });
+  else if (s.size > 6 && s.income !== null && s.income <= MOD[s.size-1]) add({ id:"fuel", pr:2, st:"maybe", title:"Fuel assistance (heating help)",
+    get:"Help paying for heat from Nov 1 to Apr 30.", why:"We don't have the published limit for households of 7 or more. Ask Self Help Inc.", steps:["Contact Self Help Inc. (selfhelpinc.org) with your household size and income."], contacts:[C.selfhelp] });
+
+  // 3. Behind on bills
+  if (s.behind) add({ id:"arrears", pr:1, st: discountOK ? "yes" : "maybe", title:"Old utility debt forgiven over time",
+    get: ng ? "National Grid's Arrears Management Program forgives past-due balances (up to $12,000 a year) as you make on-time payments. Eversource Gas has a similar program." : "Eversource's arrearage program forgives past-due balances as you make on-time payments.",
+    why: discountOK ? "You look eligible for the discount rate, which these programs require." : "These programs require the discount rate first. If you can't get it, ask for a payment plan.",
+    steps:["Get on the discount rate first.", "Ask the utility to enroll you in the arrears program ($200+ at least 60 days past due for National Grid; $300+ for Eversource Gas).", "If money is tight in winter, tell the utility: with a financial-hardship form, heating service can't be shut off Nov 15–Mar 15."],
+    contacts: ng ? [C.ngamp, C.egma] : [C.eversourceE, C.egma] });
+
+  // 4. Supplier check
+  add({ id:"supplier", pr:2, st:"yes", title:"Check who supplies your electricity",
+    get:"With delivery, the town program costs about 36.7¢ per kWh vs 39.5¢ on National Grid's standard price (supply 14.34¢ vs 17.19¢; delivery 22.3¢ is the same). About $17 a month for a typical house.",
+    why:"Every Stoughton electric customer can join or leave the town program at no charge. The current town price runs through the November 2026 meter reads; the renewal price isn't posted yet.",
+    steps:["Find the Supplier line on your electric bill (like the example above).", "“Direct Energy” at 14.34¢ (36.7¢ with delivery) is the town program. Any other supplier name: compare prices before your contract renews.", "To join or leave, see stoughton.org/396 (Community Choice Power Supply)."],
+    bill:true, contacts:[C.colonial] });
+
+  // 5. Heat Pump Rate
+  if (s.heat === "heatpump") add({ id:"hprate", pr:2, st:"yes", title:"Lower winter electric rate for heat pumps",
+    get: ng ? "National Grid's Heat Pump Rate cuts about 4.2¢ per kWh from Nov 1 to Apr 30 on ALL your electricity, and from Nov 1, 2026 transmission drops about 3.5¢ more: 31.8¢ instead of 39.5¢." : "Eversource's seasonal heat pump rate lowers winter delivery charges (about $540 a season in the state's estimate).",
+    why:"You heat with a heat pump. Customers who got a Mass Save heat pump rebate since 2019 may already be enrolled.",
+    steps:["Check your bill for the Heat Pump Rate.", "If it's not there, send the utility's online enrollment form with proof of your heat pump.", "Discount-rate customers can get both."], contacts:[ng ? C.ngrid : C.eversourceE] });
+
+  // 6. Assessment
+  let aGet, aSt = "yes";
+  if (discountOK) aGet = "No-cost upgrades: insulation, air sealing, and often heating equipment, windows and inefficient appliances.";
+  else if (tier === "moderate") aGet = "Mass Save pays about 90% of insulation and air sealing, plus help with wiring or vermiculite that blocks insulation.";
+  else aGet = "Free visit, then Mass Save pays about 90% of recommended insulation and air sealing.";
+  add({ id:"assessment", pr:3, st:aSt, title:"Free home energy assessment",
+    get:aGet,
+    why:(tier==="moderate" ? "Your income is in Mass Save's moderate band (61–80% of state median income). " : tier==="low" ? "Your income is in Mass Save's income-eligible band. " : "") + (owner ? "" : "Renters can get an assessment; the landlord approves insulation work. ") + (s.building==="small" && owner ? "Landlords of 2–4 units: 100% of insulation if all units take part (up to $3,000 per unit). " : "") + "Sealing and insulating saves about 15% on heating and cooling on average.",
+    steps:[discountOK ? "Contact Mass Save's income-eligible program and say you are on (or applying for) a discount rate." : "Book online at masssave.com.", "Be home for the visit (about 2 hours). Ask for the written report.", "Schedule the insulation work they recommend. Weatherization is required before a whole-home heat pump rebate."],
+    contacts: discountOK ? [C.ie, C.selfhelp] : [C.masssave] });
+
+  // 7. Vermiculite
+  if (s.verm) add({ id:"verm", pr:3, st:"maybe", title:"Vermiculite attic insulation",
+    get:"Free testing, and the Zonolite Trust repays 55% of removal (up to about $5,400 in its 2026 year).",
+    why:"Loose, pebble-like insulation may be vermiculite, which can contain asbestos. It has to be dealt with before new insulation goes in. The Trust says its percentage may drop.",
+    steps:["Don't touch or disturb it.", "Tell the Mass Save assessor.", "Request the free test at zonoliteatticinsulation.com before hiring a removal contractor."], contacts:[] });
+
+  // 8. Heat pump
+  if (has("heatpump") || (fossilSwap && owner)) {
+    let get, st = "info";
+    if (discountOK && fossilSwap) { get = "A heat pump may be installed at no cost through the income-eligible program, since you heat with " + s.heat + "."; st = "yes"; }
+    else if (tier==="moderate" && fossilSwap) { get = "Up to $16,000, or no cost through the Turnkey option, for replacing " + s.heat + " heat."; st = "yes"; }
+    else get = "Mass Save 2026: whole-home $2,650 per ton, up to $8,500. Partial-home $1,125 per ton, plus $500 for weatherizing and $500 for sizing it to heat the whole house.";
+    let why = s.heat==="gas" ? "Heads up: with gas heat, a heat pump alone usually costs MORE to run, even on the Heat Pump Rate (example house: about $800 a year more with a ducted system). Adding insulation, a heat pump water heater and solar can bring the monthly total below today: see the monthly cost with loans below." :
+      s.heat==="heatpump" ? "You already have one. Make sure you're on the Heat Pump Rate." :
+      s.heat==="electric" ? "Electric baseboard homes save the most: a heat pump uses about half the electricity even in winter." :
+      fossilSwap ? "With " + s.heat + ", a heat pump usually saves on heating at today's prices (oil at $6.15: about $530 a year ducted, $920 ductless, on the Heat Pump Rate). Check the winter cost and the monthly cost with loans below, with your own usage." : "";
+    if (!owner) why += " As a renter, the landlord has to agree to the installation.";
+    add({ id:"heatpump", pr: fossilSwap ? 4 : 6, st: s.heat==="gas" ? "maybe" : st, title:"Air-source heat pump",
+      get, why,
+      steps:["Weatherize first.", "Get 2–3 quotes. Ask for the COP at 5°F, a Manual J heat-loss calculation, the size of the strip heat and when it runs, and a written month-by-month winter bill estimate.", "Pay with the 0% HEAT Loan (up to $25,000, 7 years) and apply BEFORE the work is installed.", before(2026,12,31) ? "For 2026 amounts, install by Dec 31, 2026 and file by Feb 28, 2027. The proposed 2027 maximum is $7,500." : "2027 rebate amounts: check masssave.com (the proposed maximum is $7,500).", "After installation, confirm you are on the Heat Pump Rate."],
+      contacts:[discountOK ? C.ie : C.masssave], link:"#winter" });
+  }
+
+  // 9. Water heater
+  if (has("water")) add({ id:"water", pr:5, st:"yes", title:"Heat pump water heater",
+    get:"$750 for an all-in-one unit, $1,500 for a split system. Up to about 65% lower hot-water cost than a standard electric tank.",
+    why:"It replaces an electric, propane, gas or oil water heater and must be installed by a licensed plumber." + (discountOK ? " Ask the income-eligible program whether they can cover it." : ""),
+    steps:["Plan it before the old one fails (10+ years old is a good time).", "Home Depot and Lowe's take the rebate off at checkout; otherwise apply online.", before(2026,12,31) ? "2026 amounts need installation by Dec 31; file by Feb 28, 2027." : "Check the current amount on masssave.com."], contacts:[C.masssave] });
+
+  // 10. Appliances
+  if (has("kitchen") || has("laundry") || has("fridge")) {
+    const items = [];
+    if (has("kitchen")) items.push("Induction cooktop or range: $500 when it replaces a gas or propane stove (the old stove is verified before removal). Battery-equipped 120-volt ranges avoid a panel upgrade but likely don't get this rebate.");
+    if (has("laundry")) items.push("All-in-one heat pump washer-dryer: no dryer vent, plugs into a regular outlet. May qualify for $200 (dryer), plus $150 (washer) if a working top-loader with agitator is verified before removal.");
+    if (has("fridge")) items.push("Old working fridge or freezer: Mass Save pays $75 and picks it up free" + (before(2026,12,31) ? " (2026 pickups by Dec 31)." : ".") + (discountOK ? " Income-eligible homes may get a no-cost replacement if the old one is inefficient." : ""));
+    add({ id:"appliances", pr:6, st:"yes", title:"Appliance rebates", get:"Mass Save rebates on the appliances you picked.", why:"Buy in 2026 and apply by Feb 28, 2027. Keep receipts and photos of the old appliance.", steps:items, contacts:[C.masssave] });
+  }
+
+  // 11. Financing
+  if (owner) {
+    const eshlOK = smallBldg && s.income !== null && s.income <= ESHL_MAX;
+    add({ id:"loans", pr: s.replace ? 2 : 5, st:"yes", title:"0% and low-interest loans for a new system",
+      get:"Mass Save HEAT Loan: 0%, up to $25,000, up to 7 years." + (eshlOK ? " Energy Saver Home Loan: " + (s.income <= ESHL_LOW ? "0.5%" : "2%") + " fixed, $10,000–$100,000, 20 years (first 18 months interest-only)." : "") + " Example: a $25,000 whole-home heat pump minus the $8,500 rebate is about $196 a month on a HEAT Loan.",
+      why:(eshlOK ? "Your income is under the Norfolk County limit for the " + (s.income <= ESHL_LOW ? "0.5% rate ($124,000)." : "2% rate ($209,250).") + " The Energy Saver loan needs a 1–4 unit home you live in, a site visit showing at least 20% energy savings, and about 45 days to close. It also covers panel upgrades, roofs for solar and asbestos removal, and it can be combined with a HEAT Loan. " : s.building==="condo" ? "Condos can use the HEAT Loan but not the Energy Saver Home Loan. " : "") + "Neither loan pays for new gas or oil equipment.",
+      link:"#package", linkText:"See your monthly cost: loan plus bills vs today", steps:["Get the contractor's written quote, then apply for the HEAT Loan at myheatloan.com BEFORE the work is installed. Whole-home heat pumps also need the Mass Save assessment.", "Take the authorization to a participating lender, for example Stoughton Co-operative Bank or Sharon & Crescent United Credit Union.", eshlOK ? "For a bigger project, contact the Energy Saver loan concierge (CET) early; closing takes about 45 days." : "Ask the lender how long approval takes."], contacts: eshlOK ? [C.stoco, C.cet] : [C.stoco] });
+  }
+
+  // 11b. Failed or failing system
+  if (s.replace) add({ id:"replace", pr:1, st:"yes", title:"Your heating or AC system needs replacing",
+    get: discountOK ? "Income-eligible: heating repair or replacement at no cost through Self Help Inc. (emergency program) or Mass Save's income-eligible heat pump program." : "Replace it with a heat pump and pay over time: rebate first, then a 0% HEAT Loan for the rest.",
+    why:"Mass Save and the HEAT Loan no longer pay for new gas or oil furnaces or boilers (except for income-eligible homes). If only the central AC failed and the furnace still works, a heat pump in place of the AC cools the same, also heats, and gets $250 a ton back (up to $2,500) with no assessment needed.",
+    steps: discountOK ? ["No heat now: contact Self Help Inc.'s energy office (emergency repair or replacement).", "Ask Mass Save's income-eligible program about a no-cost heat pump.", "Apply for fuel assistance if you haven't: it confirms eligibility for both."] :
+      ["Get 2–3 heat pump quotes; ask for the COP at 5°F and the size of the strip heat.", "Apply for the HEAT Loan before the work starts; it can't cover work already installed.", "File the Mass Save rebate after installation (2026 installs: by Feb 28, 2027)."],
+    contacts: discountOK ? [C.shenergy, C.ie] : [C.masssave, C.stoco] });
+
+  // 12. Solar
+  if (has("solar")) {
+    if (owner && smallBldg) add({ id:"solar", pr:8, st:"info", title:"Rooftop solar",
+      get:"Example 8 kW system: about $23,000 before incentives, about $3,000 a year in bill credits at today's rates, about $290 a year from SMART for 20 years, and a $1,000 state tax credit. Roughly a 6–8 year payback.",
+      why:"The panels are exempt from local property tax for 20 years. The federal credit for systems you buy ended.*", star:true,
+      steps:["Look up your roof on Project Sunroof (sunroof.withgoogle.com). If the roof is 10+ years old, plan roof work first.", "Get quotes on EnergySage without sales calls.", "Leasing or a PPA? Insist on a buy-out or transfer clause for when you sell."], contacts:[] });
+    else add({ id:"solar", pr:8, st:"yes", title:"Community solar",
+      get:"Subscribe to a solar farm and get bill credits, typically 5–20% savings on those credits. No roof needed.",
+      why:"Rooftop solar usually isn't an option for renters, condos or large buildings, but community solar is. New projects must enroll at least 40% low-income subscribers.",
+      steps:["Browse projects on MassCEC's community solar finder or EnergySage.", "Read the contract: length, cancellation terms, and the discount."], contacts:[] });
+  }
+
+  // 13. Battery
+  if (has("battery")) add({ id:"battery", pr:8, st:"info", title:"Home battery",
+    get:"ConnectedSolutions pays $275 per kW each summer (no winter program): about $1,000–$1,240 a year for a typical 13.5 kWh battery. A 13 kWh battery costs about $16,000 installed.",
+    why:"Payments alone take 13–16 years to repay it, so buy it for backup power in outages. HEAT Loan 0% is available if enrolled in ConnectedSolutions. The federal credit for batteries you buy ended.*", star:true,
+    steps:["List what you'd need running in an outage and for how long. That sets the size.", "Talk to the Building and Fire Departments before you buy.", "Enroll in ConnectedSolutions through the battery maker's app."], contacts:[C.building, C.fire] });
+
+  // 14. Geothermal
+  if (has("geo")) add({ id:"geo", pr:8, st:"info", title:"Geothermal heat pump",
+    get:"Mass Save pays $13,500" + (tier!=="standard" && tier!=="unknown" ? ", or up to $25,000 for income-qualified homes like yours" : " (up to $25,000 for income-qualified homes)") + ". Some of the lowest running costs of any heating.",
+    why: owner && smallBldg ? "The federal credit for systems you buy ended. A company that owns the system can still claim up to 30%, and neighbors buying together may be able to negotiate for part of that.*" : "Geothermal usually needs a building owner and room for drilling. Ask about neighborhood networks.*", star:true,
+    steps:["Check your lot: room and access for a drill rig, septic and well locations.", "Get a design with a heat-loss calculation.", "Leasing or a service plan? Make sure it can be bought out or transferred when you sell."], contacts:[C.masssave] });
+
+  // 15. EV
+  if (has("ev")) add({ id:"ev", pr:8, st:"yes", title:"Electric car",
+    get:"MOR-EV: $3,500 for a new EV (price up to $55,000), +$1,500 if income-qualified, +$1,000 with a trade-in. Used EVs: $3,500 for income-qualified buyers.",
+    why:"Federal EV credits ended Sept 30, 2025 and the home-charger credit ended June 30, 2026.* The state rebate is still open; rules may change in 2027.", star:true,
+    steps:["Check mor-ev.org before you buy.", ng ? (before(2026,12,10) ? "Home charger: National Grid pays up to $700 for wiring in a single-family home ($1,400 for 2–4 units; more for discount-rate homes through Turnkey). Apply by Dec 10, 2026." : "Home charger: National Grid's 2026 wiring rebates have closed; a new program is proposed for 2027.") : "Home charger: check Eversource's EV program.", ng ? "Join Off-Peak Charging: 5¢ back per kWh in summer and 3¢ the rest of the year for charging 9 pm–1 pm." : "Ask Eversource about its managed charging program."], contacts:[] });
+
+  // 16. Group buying
+  if (has("group") || has("solar") || has("battery") || has("geo")) add({ id:"group", pr:9, st:"info", title:"Buy with your neighbors",
+    get:"The committee is collecting interest for group purchases of solar, batteries, heat pumps and geothermal.",
+    why:"A group can negotiate a lower price and a fair contract, and may be able to get some commercial-credit value passed on. The committee sells nothing; installers would be chosen through an open, competitive process.",
+    steps:["Tell the committee at a library session or on facebook.com/stoughtonesc.", "Or fill in a paper form at any library session."], contacts:[C.esc] });
+
+  // 17. Council on Aging
+  if (s.senior) add({ id:"coa", pr:4, st:"yes", title:"Help from the Council on Aging",
+    get:"The COA takes fuel assistance applications by appointment and can help with forms. Ask about rides to library sessions.",
+    why:"Someone in your household is 60+ or has a disability.", steps:["Visit or ask for an appointment at 110 Rockland St (stoughton.org/355)."], contacts:[C.coa] });
+
+  return P.sort((a,b) => a.pr - b.pr);
+}
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mo = n => (n < 0 ? "−" : "") + money(Math.abs(n));
+const sv = (n, d = 0) => (n > 0 ? "+" : n < 0 ? "−" : "") + "$" + Math.abs(n).toFixed(d);
+const RM = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const SVG = p => '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
+const I = {
+  bill: SVG('<path d="M6 3h12v18l-3-1.8L12 21l-3-1.8L6 21z"/><path d="M9 8h6M9 12h6M9 16h3"/>'),
+  home: SVG('<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/>'),
+  compass: SVG('<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>'),
+  flame: SVG('<path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2.2 1.2-3.8 2.5-5 .3 1.6 1 2.6 2 3 0-3 .3-5.5.5-8z"/>'),
+  drop: SVG('<path d="M12 3.5c3 4 6 7.2 6 10.5a6 6 0 0 1-12 0c0-3.3 3-6.5 6-10.5z"/>'),
+  tank: SVG('<rect x="3.5" y="8" width="17" height="10" rx="5"/><path d="M10 8V5.5h4V8M7 18v2M17 18v2"/>'),
+  bolt: SVG('<path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/>'),
+  wx: SVG('<path d="M3 11.5 12 4l9 7.5"/><path d="M6 10.5h12M7 13.5h10M8 16.5h8"/>'),
+  hp: SVG('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="10" cy="12" r="3.5"/><path d="M17 9v6"/>'),
+  geo: SVG('<path d="M3 8h18"/><path d="M8 8v12M16 8v12"/><path d="M8 20c0-3 8-3 8 0"/><path d="M12 3v5"/>'),
+  hpwh: SVG('<rect x="7" y="3" width="10" height="18" rx="3"/><path d="M12 9c-1.5 2-1.5 3.5 0 4.5 1.5-1 1.5-2.5 0-4.5z"/>'),
+  induction: SVG('<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="8.5" cy="12" r="2.5"/><circle cx="15.5" cy="12" r="2.5"/>'),
+  laundry: SVG('<rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6.5h2"/>'),
+  fridge: SVG('<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9 6v2M9 13v3"/>'),
+  solar: SVG('<path d="M4 18 7 8h10l3 10z"/><path d="M5.5 13h13M10 8l-1 10M14 8l1 10"/>'),
+  battery: SVG('<rect x="4" y="7" width="15" height="10" rx="2"/><path d="M21 10.5v3"/><path d="M11 9l-2 3h3l-2 3"/>'),
+  panel: SVG('<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h6M9 11h6M9 15h6"/>'),
+  ev: SVG('<path d="M4 16v-4l2-5h12l2 5v4"/><path d="M4 16h16"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/><path d="M6.5 12h11"/>'),
+  evc: SVG('<rect x="5" y="3" width="10" height="18" rx="2"/><path d="M15 8h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V9"/><path d="M11 8l-2 4h3l-2 4"/>'),
+  group: SVG('<circle cx="8" cy="9" r="2.5"/><circle cx="16" cy="9" r="2.5"/><path d="M3.5 19c.6-3 2.4-4.5 4.5-4.5s3.9 1.5 4.5 4.5M11.5 19c.6-3 2.4-4.5 4.5-4.5s3.9 1.5 4.5 4.5"/>'),
+};
+
+/* ---------- state ---------- */
+const HSIZE = { small:{t:"Small", s:"under 1,500 sq ft", mm:40}, medium:{t:"Medium", s:"1,500–2,500 sq ft", mm:64}, large:{t:"Large", s:"over 2,500 sq ft", mm:90} };
+const FUELS = {
+  oil:{t:"Oil", s:"Delivered", unit:"gallons", btu:138500, eff:0.83, ic:"drop"},
+  gas:{t:"Gas", s:"Eversource Gas", unit:"therms", btu:100000, eff:0.80, ic:"flame"},
+  propane:{t:"Propane", s:"Delivered", unit:"gallons", btu:91452, eff:0.85, ic:"tank"},
+  electric:{t:"Electric heat", s:"Baseboard or wall", unit:"kWh", btu:3412, eff:1.0, ic:"bolt"},
+  heatpump:{t:"Heat pump", s:"Already have one", unit:"kWh", btu:3412, eff:2.07, ic:"hp"},
+};
+const BLD = { single:"House", small:"2–4 units", condo:"Condo", large:"5+ units" };
+const COOL = { central:"Central AC", window:"Window units", none:"No AC" };
+const SHORT = { wx:"Insulation", hp:"Heat pump", geo:"Geothermal", hpwh:"Water heater", solar:"Solar", battery:"Battery", panel:"Panel", ev:"Electric car", evc:"EV charger", induction:"Induction stove", laundry:"Washer-dryer", fridge:"Fridge pickup" };
+const DEFAULT = () => ({ screen:"landing", open:"home", touched:false, goal:"upgrade", tenure:"own", building:"single", utility:"ngrid", heat:"oil", hsize:"medium", exact:"", people:3, income:105000,
+  benefits:false, senior:false, behind:false, hpType:"ducted", up:{wx:true, hp:true, hpwh:true, solar:true, panel:true}, kw:8, cost:{}, plan:null,
+  bankRate:7, bankYears:15, baseKwh:600, supplier:"basic", supply:PKG.supplyBasic, cool:"window",
+  price:{gas:2.60, oil:4.09, propane:3.62, electric:0.395}, miles:12000, mpg:28, gasPrice:4.39, billElec:"", billFuel:"", carGas:"",
+  group:false, credPrice:0.90, groupBonus:true, leaseRate:7, leaseMode:"today", showMore:false });
+const OIL = { winter:4.09, now:6.15 };
+const SUPPLIERS = { basic:{t:"National Grid", p:0.17185}, town:{t:"Town program", p:0.1434}, other:{t:"Other", p:0.17185}, unsure:{t:"Not sure", p:0.17185} };
+let S = DEFAULT();
+
+const hasUps = () => S.goal !== "help" && S.tenure === "own";
+const secs = () => hasUps() ? ["home", "bills", "people", "upgrades", "pay"] : ["home", "bills", "people"];
+const SECT = { home:"Your home", bills:"Your bills", people:"Your household", upgrades:"Upgrades", pay:"How you pay" };
+
+/* ---------- model glue ---------- */
+function oldState(){
+  // every equipment program is listed for everyone, so nobody misses a rebate or loan
+  const int = ["heatpump", "water", "kitchen", "laundry", "fridge", "solar", "battery", "geo", "ev"];
+  return { tenure:S.tenure, building:S.building, heat:S.heat, utility:S.utility, size:S.people, income:S.income, benefits:S.benefits ? ["snap"] : [],
+    senior:S.senior, behind:S.behind, verm:false, billsmine:true, replace:S.goal === "broken", int };
+}
+function heatUse(){
+  const F = FUELS[S.heat], mm = HSIZE[S.hsize].mm;
+  if (S.exact !== "" && Number(S.exact) > 0) return Number(S.exact);
+  const bf = Number(S.billFuel);
+  if (bf > 0 && ["oil", "propane", "gas"].includes(S.heat)) {
+    // from what you pay: total fuel minus the hot water share
+    const water = PKG.hwMMBtu * 1e6 / (F.btu * PKG.hwEffFuel);
+    const units = S.heat === "gas" ? Math.max(0, bf - PKG.gasCust) * 12 / S.price.gas : bf / S.price[S.heat];
+    return Math.max(0, units - water);
+  }
+  return mm * 1e6 / (F.btu * F.eff);
+}
+function baseKwh(){
+  const be = Number(S.billElec);
+  if (!(be > 0)) return S.baseKwh;
+  const std = S.supply + PKG.dStd, hpw = S.supply + PKG.dHpw, hpNow = S.heat === "heatpump";
+  const cool = hpNow ? PKG.cool.hp : (PKG.cool[S.cool] || 0);
+  const yr = Math.max(0, be - PKG.elecCust) * 12;
+  const water = PKG.hwMMBtu * 1e6 / 3412 / PKG.hwEffElec;   // electric tank in electric-heat homes
+  if (S.heat === "electric") return Math.max(150, (yr / std - heatUse() - cool - water) / 12);
+  if (hpNow) return Math.max(150, ((yr - heatUse() * hpw - cool * std) / (0.5 * std + 0.5 * hpw) - water) / 12);
+  return Math.max(150, (yr / std - cool) / 12);
+}
+const carMiles = () => Number(S.carGas) > 0 ? Number(S.carGas) * 12 / S.gasPrice * S.mpg : S.miles;
+function estimates(){
+  const keep = [S.billElec, S.billFuel, S.exact];
+  S.billElec = ""; S.billFuel = ""; S.exact = "";
+  const r = pkgModel(inputs({}));
+  [S.billElec, S.billFuel, S.exact] = keep;
+  return { elec: r.elec0 / 12, fuel: S.heat === "gas" ? (r.fuel0 + r.gas0) / 12 : r.fuel0, car: S.miles / S.mpg * S.gasPrice / 12 };
+}
+function eshl(){
+  const ok = S.tenure === "own" && (S.building === "single" || S.building === "small") && S.income <= ESHL_MAX;
+  const why = S.tenure !== "own" ? "for homeowners" : (S.building === "condo" || S.building === "large") ? "not for condos or 5+ units" : "income above $209,250";
+  return { rate: ok ? (S.income <= ESHL_LOW ? 0.005 : 0.02) : null, why };
+}
+function inputs(on){
+  const hpNow = S.heat === "heatpump";
+  const fuel = hpNow ? "electric" : S.heat;
+  const t = incomeTier(oldState());
+  return { fuel, amt:heatUse(), price: hpNow ? 0 : S.price[fuel], eff: FUELS[S.heat].eff, cop: S.hpType === "ductless" ? 2.39 : 2.07, hpNow,
+    baseKwh:baseKwh(), on: on || activeUps(), cost:S.cost, kw:S.kw, tier: t === "unknown" ? "standard" : t, eshlRate:eshl().rate,
+    otherRate:S.bankRate / 100, otherYears:Math.max(1, Math.round(S.bankYears)), supply:S.supply, cool:S.cool,
+    ev:{ miles:carMiles(), mpg:S.mpg, gas:S.gasPrice }, evcRebate: before(2026, 12, 10),
+    group:{ on:S.group, price:S.credPrice, bonus:S.groupBonus, rate:S.leaseRate / 100, mode:S.leaseMode } };
+}
+function activeUps(){
+  if (!hasUps()) return {};
+  const on = { ...S.up };
+  if (S.heat === "heatpump") on.hp = false;
+  return on;
+}
+function run(on){ return pkgModel(inputs(on)); }
+function bestPlan(r){
+  const av = ["B", "A", "C"].filter(k => planOK(r, k));
+  if (S.plan && av.includes(S.plan)) return S.plan;
+  return av.reduce((b, k) => (r.plans[k].years[2] < r.plans[b].years[2] ? k : b), av[0] || "C");
+}
+function planOK(r, k){ return r.plans[k].avail && (k !== "A" || r.plans.A.heat > 0); }
+function planName(k){
+  const e = eshl();
+  return k === "B" ? "Energy Saver loan " + (e.rate != null ? String(e.rate * 100).replace(/^0\./, "0.") + "%" : "") : k === "A" ? "0% HEAT Loan first" : "Bank loan " + S.bankRate + "%";
+}
+function withState(tmp, fn){ const keep = S; S = tmp; try { return fn(); } finally { S = keep; } }
+
+/* net zero: solar covers the electricity, so the bill is the $10 connection fee; SMART and battery payments are extra */
+const billOnly = r => (r.elec1 + r.smart + r.cs) / 12;
+const isNZ = r => billOnly(r) <= PKG.elecCust + 0.5;
+const income = r => (r.smart + r.cs) / 12;
+
+/* quick wins: ways to pay less without new equipment */
+function quickWins(){
+  const r0 = run({}), s = oldState(), tier = incomeTier(s), disc = s.benefits.length > 0 || tier === "low", ng = S.utility !== "eversource";
+  const W = [];
+  if (ng && S.supplier !== "town") W.push({ id:"supplier", t:"Switch to the town electricity program", save: S.supplier === "other" ? 0 : r0.kwh0 * (PKG.supplyBasic - PKG.supplyTown) / 12,
+    how: S.supplier === "other" ? "Compare your supplier's price with the town's 14.34¢. Some door-to-door contracts jump after a few months." : "36.7¢ instead of 39.5¢ a kWh with delivery. Free to join or leave; the price runs through the Nov 2026 meter reads.", c:[C.colonial] });
+  if (disc) W.push({ id:"discount", t:"Get the discount rate", save:(0.32 * r0.elec0 + (S.heat === "gas" ? 0.25 * (r0.fuel0 + r0.gas0) : 0)) / 12, more:true,
+    how:"32–71% off electricity by income" + (S.heat === "gas" ? ", 25% off gas" : "") + ". New levels start Nov 1, 2026.", c:[ng ? C.ngrid : C.eversourceE] });
+  if (S.heat === "heatpump") W.push({ id:"hprate", t:"Check you're on the Heat Pump Rate", save:r0.hpDisc0 / 12, check:true,
+    how:"31.8¢ instead of 39.5¢ a kWh, Nov–Apr, on all your electricity. Look for it on your bill.", c:[ng ? C.ngrid : C.eversourceE] });
+  const x = inputs({}), it = ITEMS.find(i => i.id === "wx"), wc = S.cost.wx != null ? S.cost.wx : it.cost;
+  const share = wc - rebateFor("wx", wc, { fuel:x.fuel, tier:x.tier }), rw = run({ wx:true });
+  W.push({ id:"assessment", t:"Free energy assessment, then insulation", save:(r0.bills1 - rw.bills1) / 12,
+    how:"Air sealing and insulation cut heating about 15%. " + (share > 0 ? "You pay about " + money(share) + "; Mass Save pays about 90%." : "No cost at your income.") + (S.tenure === "rent" ? " Your landlord approves the work." : ""), c:[disc ? C.ie : C.masssave] });
+  if (S.people <= 6 && S.income <= FA[S.people - 1]) W.push({ id:"fuel", t:"Fuel assistance", save:0, label:"Help with winter heating",
+    how:"Help paying for heat Nov 1–Apr 30, any fuel. Renters can apply. Applications opened Oct 1.", c:[C.selfhelp] });
+  if (S.behind) W.push({ id:"arrears", t:"Old utility debt forgiven over time", save:0, label:"Up to $12,000 a year",
+    how:"Get on the discount rate, then ask for the arrears program. With a hardship form, heat can't be shut off Nov 15–Mar 15.", c: ng ? [C.ngamp, C.egma] : [C.eversourceE, C.egma] });
+  return W;
+}
+const winSum = W => W.filter(w => !w.check).reduce((a, w) => a + Math.max(0, w.save), 0);
+
+/* ---------- small builders ---------- */
+const G = (label, inner) => '<div class="grp">' + (label ? '<div class="gl">' + label + '</div>' : "") + inner + '</div>';
+function seg(name, value, opts, cls){
+  return '<div class="seg ' + (cls || "") + '" role="radiogroup">' + opts.map(([v, t, s]) =>
+    '<div class="o"><input type="radio" name="' + name + '" id="' + name + '-' + v + '" value="' + v + '"' + (String(value) === String(v) ? " checked" : "") + '><label for="' + name + '-' + v + '">' + esc(t) + (s ? '<small>' + esc(s) + '</small>' : "") + '</label></div>').join("") + '</div>';
+}
+function tiles(name, value, opts){
+  return '<div class="tiles" role="radiogroup">' + opts.map(o => '<div class="tile"><input type="radio" name="' + name + '" id="' + name + '-' + o.v + '" value="' + o.v + '"' + (value === o.v ? " checked" : "") + '><label for="' + name + '-' + o.v + '"><span class="ic">' + I[o.ic] + '</span><span class="t">' + esc(o.t) + '</span><span class="s">' + esc(o.s) + '</span></label></div>').join("") + '</div>';
+}
+const phones = c => (c || []).map(p => '<a class="phone" href="' + esc(p[2]) + '" target="_blank" rel="noopener"><span>' + esc(p[0]) + '</span><code>' + esc(p[1]) + ' ↗</code></a>').join("");
+
+/* ---------- the house ---------- */
+function houseSVG(id){
+  const win = (x, y, w, h) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="2" style="fill:var(--st-win);stroke:var(--st-line)" stroke-width="1.5"/><path d="M' + (x + w / 2) + ' ' + y + 'v' + h + 'M' + x + ' ' + (y + h / 2) + 'h' + w + '" style="stroke:var(--st-mull)" stroke-width="2.5"/>';
+  const rays = [0, 45, 90, 135, 180, 225, 270, 315].map(a => { const c = Math.cos(a * Math.PI / 180), s = Math.sin(a * Math.PI / 180); return '<path d="M' + (690 + c * 32) + ' ' + (78 + s * 32) + 'L' + (690 + c * 42) + ' ' + (78 + s * 42) + '"/>'; }).join("");
+  const U = 'style="fill:var(--st-unit);stroke:var(--st-line)" stroke-width="1.5"';
+  return '<svg class="house still" id="' + id + '" viewBox="0 0 800 470" role="img" aria-label="House">' +
+    '<g class="g g-group off"><path d="M34 390V300l64-50 64 50v90z" style="fill:var(--st-far)"/><path d="M640 390V296l64-50 64 50v94z" style="fill:var(--st-far)"/></g>' +
+    '<g class="g g-sun off"><circle cx="690" cy="78" r="24" style="fill:var(--st-sun-c)"/><g style="stroke:var(--st-sun-c)" stroke-width="3" stroke-linecap="round">' + rays + '</g></g>' +
+    '<g style="fill:var(--st-cloud)" opacity=".9"><ellipse cx="150" cy="92" rx="40" ry="11"/><ellipse cx="170" cy="83" rx="22" ry="12"/><ellipse cx="548" cy="56" rx="34" ry="9"/><ellipse cx="565" cy="49" rx="18" ry="10"/></g>' +
+    '<rect x="0" y="390" width="800" height="80" style="fill:var(--st-earth)"/><rect x="0" y="385" width="800" height="7" style="fill:var(--st-grass)"/>' +
+    '<g class="g g-geo off" fill="none" style="stroke:var(--st-loop)" stroke-width="3" stroke-linecap="round">' + [262, 346, 430].map(x => '<path d="M' + x + ' 394V450a8 8 0 0 0 16 0V394"/>').join("") + '</g>' +
+    '<rect x="112" y="318" width="10" height="72" style="fill:var(--st-trunk)"/><circle cx="117" cy="298" r="40" style="fill:var(--st-tree)"/>' +
+    '<rect x="200" y="215" width="320" height="175" style="fill:var(--st-wall);stroke:var(--st-line)" stroke-width="1.5"/>' +
+    '<g class="g g-wx off"><rect x="207" y="222" width="306" height="161" fill="none" style="stroke:var(--st-insul)" stroke-width="5" stroke-dasharray="11 6"/><rect x="200" y="212" width="320" height="9" style="fill:var(--st-insul)"/></g>' +
+    '<path d="M185 218L245 140H475L535 218Z" style="fill:var(--st-roof)"/>' +
+    '<rect x="258" y="112" width="22" height="46" style="fill:var(--st-brick)"/><rect x="254" y="107" width="30" height="7" style="fill:var(--st-roof)"/>' +
+    '<g class="g g-smoke off"><circle class="sm s1" cx="270" cy="92" r="7"/><circle class="sm s2" cx="278" cy="74" r="9"/><circle class="sm s3" cx="289" cy="54" r="11"/></g>' +
+    '<g class="g g-solar off"></g>' +
+    win(230, 240, 50, 46) + win(335, 240, 50, 46) + win(440, 240, 50, 46) + win(230, 316, 50, 48) + win(440, 316, 50, 48) +
+    '<rect x="335" y="310" width="50" height="80" rx="2" style="fill:var(--st-door)"/><circle cx="376" cy="352" r="2.5" style="fill:var(--st-wall)"/><rect x="326" y="387" width="68" height="4" style="fill:var(--st-line)"/>' +
+    '<g class="g g-wac off"><rect x="237" y="283" width="36" height="14" rx="2" ' + U + '/><path d="M243 290h24" style="stroke:var(--st-line)" stroke-width="1.5"/></g>' +
+    '<g class="g g-cac off"><rect x="540" y="356" width="38" height="34" rx="3" ' + U + '/><path d="M546 364h26M546 371h26M546 378h26" style="stroke:var(--st-line)" stroke-width="1.5"/></g>' +
+    '<g class="g g-hp off"><path d="M520 352h12" style="stroke:var(--st-line)" stroke-width="3"/><rect x="532" y="338" width="66" height="50" rx="5" ' + U + '/><circle cx="557" cy="363" r="16" fill="none" style="stroke:var(--st-line)" stroke-width="2"/><path d="M557 349v28M543 363h28" style="stroke:var(--st-line)" stroke-width="1.5"/><path d="M582 348v30M589 348v30" style="stroke:var(--st-line)" stroke-width="1.5"/></g>' +
+    '<g class="g g-bat off"><rect x="497" y="318" width="17" height="42" rx="3" ' + U + '/><path d="M507 327l-4 7h5l-4 7" fill="none" style="stroke:var(--st-ev)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>' +
+    '<g class="g g-oil off"><rect x="138" y="362" width="52" height="24" rx="12" style="fill:var(--st-tank)"/><path d="M146 386v4M182 386v4" style="stroke:var(--st-tank)" stroke-width="3"/><path d="M190 370h10" style="stroke:var(--st-line)" stroke-width="3"/></g>' +
+    '<g class="g g-propane off"><rect x="130" y="360" width="62" height="28" rx="14" ' + U + '/><rect x="154" y="354" width="14" height="7" rx="2" style="fill:var(--st-line)"/></g>' +
+    '<g class="g g-gasm off"><rect x="208" y="346" width="18" height="22" rx="2" ' + U + '/><circle cx="217" cy="355" r="4" fill="none" style="stroke:var(--st-line)" stroke-width="1.5"/><path d="M217 368v22" style="stroke:var(--st-line)" stroke-width="3"/></g>' +
+    '<g class="g g-evc off"><rect x="604" y="336" width="12" height="54" rx="3" ' + U + '/><rect x="606" y="342" width="8" height="8" rx="1.5" style="fill:var(--st-ev)"/><path d="M612 356C622 356 622 366 630 366" fill="none" style="stroke:var(--st-line)" stroke-width="2.5"/></g>' +
+    '<g><path class="carbody" d="M652 352L672 332H728L752 352Z"/><rect class="carbody" x="628" y="350" width="144" height="28" rx="12"/><path d="M662 351L676 337H699V351ZM704 337H724L741 351H704Z" style="fill:var(--st-win)"/><circle cx="658" cy="380" r="10" style="fill:var(--st-tire)"/><circle cx="742" cy="380" r="10" style="fill:var(--st-tire)"/><circle cx="658" cy="380" r="4" class="carbody"/><circle cx="742" cy="380" r="4" class="carbody"/></g>' +
+    '<g class="g g-exh off"><circle cx="781" cy="372" r="5" style="fill:var(--st-smoke)"/><circle cx="791" cy="363" r="7" style="fill:var(--st-smoke)"/></g>' +
+    '</svg>';
+}
+function panelsSVG(n){
+  let h = "";
+  [[149, 24], [178, 28]].forEach(([y, hh]) => { for (let i = 0; i < n; i++) { const x = 292 + i * 38; h += '<rect x="' + x + '" y="' + y + '" width="34" height="' + hh + '" rx="1.5" style="fill:var(--st-solar);stroke:var(--st-solar-l)" stroke-width="1"/><path d="M' + (x + 17) + ' ' + y + 'v' + hh + 'M' + x + ' ' + (y + hh / 2) + 'h34" style="stroke:var(--st-solar-l)" stroke-width="1"/>'; } });
+  return h;
+}
+function houseState(after){
+  const on = after ? activeUps() : {};
+  const r = run(on);
+  const fossil = ["oil", "propane", "gas"].includes(S.heat);
+  const burning = fossil && (after ? r.fuel1 > 0.5 : true);
+  const geo = !!on.geo, hpAfter = S.heat === "heatpump" || !!on.hp || geo;
+  return {
+    group: !!(after && S.group && r.leaseAmt > 0), sun: !!on.solar, geo, wx: !!on.wx, smoke: burning,
+    oil: S.heat === "oil" && burning, propane: S.heat === "propane" && burning, gasm: S.heat === "gas" && (after ? r.gas1 > 0 : true),
+    wac: !hpAfter && S.cool === "window", cac: !hpAfter && S.cool === "central", hp: hpAfter && !geo,
+    bat: !!on.battery, ev: !!on.ev, evc: !!on.evc, exh: !on.ev, solar: on.solar ? Math.max(2, Math.min(5, Math.round(S.kw / 1.6))) : 0,
+    kw: S.kw, inside: ["hpwh", "panel", "induction", "laundry", "fridge"].filter(k => on[k]).map(k => SHORT[k].toLowerCase()),
+  };
+}
+function syncHouse(el, st, instant){
+  if (!el) return;
+  LAST[el.id] = st; if (H3[el.id]) H3[el.id].set(st, instant);
+  if (instant) el.classList.add("still");
+  ["group", "sun", "geo", "wx", "smoke", "wac", "cac", "hp", "bat", "oil", "propane", "gasm", "evc", "exh"].forEach(k => { const g = el.querySelector(".g-" + k); if (g) g.classList.toggle("off", !st[k]); });
+  el.classList.toggle("ev", !!st.ev);
+  const sg = el.querySelector(".g-solar");
+  if (st.solar && sg.dataset.n !== String(st.solar)) { sg.innerHTML = panelsSVG(st.solar); sg.dataset.n = st.solar; }
+  sg.classList.toggle("off", !st.solar);
+  const parts = [FUELS[S.heat].t + (S.heat === "heatpump" ? "" : " heat")];
+  ["wx:insulation", "hp:air-source heat pump", "geo:geothermal loops", "solar:solar panels", "bat:home battery", "ev:electric car"].forEach(p => { const [k, t] = p.split(":"); if (st[k]) parts.push(t); });
+  el.setAttribute("aria-label", "House picture: " + parts.join(", "));
+  if (instant) requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove("still")));
+}
+
+/* what the house has, as small labelled chips under the picture */
+const KIT = { wx:"var(--st-insul)", hp:"var(--act)", geo:"var(--st-loop)", hpwh:"var(--act)", solar:"var(--st-solar)", battery:"var(--good)", panel:"var(--muted)", ev:"var(--st-ev)", evc:"var(--st-ev)", induction:"var(--amber)", laundry:"var(--muted)", fridge:"var(--muted)" };
+function kitHTML(after){
+  const on = after ? activeUps() : {};
+  const items = ITEMS.filter(i => on[i.id]).map(i => [i.id === "solar" ? "Solar " + S.kw + " kW" : SHORT[i.id], KIT[i.id]]);
+  if (after && S.group && run().leaseAmt > 0) items.push(["Group lease", "var(--act)"]);
+  if (!items.length) { items.push([FUELS[S.heat].t + (S.heat === "heatpump" ? "" : " heat"), "var(--muted)"]); if (S.heat !== "heatpump") items.push([COOL[S.cool], "var(--muted)"]); }
+  return items.map(([t, c]) => '<span><i style="background:' + c + '"></i>' + esc(t) + '</span>').join("");
+}
+
+/* ---------- numbers under the house ---------- */
+function stats(){
+  const r = run(), T0 = r.bills0 / 12, b1 = r.bills1 / 12;
+  if (hasUps()) {
+    if (!r.rows.length && !r.gasoline0) return { cells:[["Today", T0], ["All new", T0], ["Paid off", T0]], note:"Pick upgrades to see the change.", verdict:["", ""] };
+    const sel = bestPlan(r), p = r.plans[sel], loan = p.years[2], tot = loan + b1, d = tot - T0;
+    const nz = isNZ(r);
+    return { cells:[["Today", T0], ["All new", tot, d <= 0.5 ? "hl" : "lo"], [nz ? "Paid off: connection fee only" : "Paid off", nz ? billOnly(r) : b1]],
+      note:'<span class="lc">' + (r.leaseAmt ? "Loan + lease " : "Loan ") + money(loan) + '</span> + <span class="bc">bills ' + mo(b1) + '</span> · ' + (r.leaseAmt ? "group lease, then you own it" : planName(sel)) + (r.gasoline0 ? " · gasoline included" : "") + (nz && income(r) > 1 ? " · SMART + battery pay you " + money(income(r)) + "/mo" : ""),
+      verdict: Math.abs(d) < 1 ? ["Same as today", "good"] : d < 0 ? [money(-d) + " a month less than today", "good"] : [money(d) + " a month more than today", "bad"] };
+  }
+  const W = quickWins(), sum = winSum(W), yes = programs(oldState()).filter(p => p.st === "yes").length;
+  return { cells:[["Today", T0], ["After these steps", T0 - sum, sum > 0 ? "hl" : ""], ["Likely programs", yes, "", "count"]], note: sum > 0 ? "Up to " + money(sum) + " a month less, with no new equipment." : "", verdict: sum > 0.5 ? ["Save up to " + money(sum) + " a month", "good"] : ["", ""] };
+}
+const fmt = (v, kind) => kind === "count" ? String(Math.round(v)) : mo(v);
+function setSpecs(el, cells, animate){
+  if (!el) return;
+  const prev = el._v || [];
+  el.innerHTML = cells.map((c, i) => '<div class="' + (c[2] || "") + '"><b><span data-i="' + i + '">' + fmt(animate && !RM() && prev[i] != null ? prev[i] : c[1], c[3]) + '</span>' + (c[3] === "count" ? "" : '<i>/mo</i>') + '</b><span class="sl">' + esc(c[0]) + '</span></div>').join("");
+  el._v = cells.map(c => c[1]);
+  if (!animate || RM()) return;
+  cells.forEach((c, i) => {
+    const a = prev[i], b = c[1], node = el.querySelector('[data-i="' + i + '"]');
+    if (a == null || Math.abs(a - b) < 1 || !node) return;
+    const t0 = performance.now(), D = 420;
+    const f = now => { const k = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - k, 3); node.textContent = fmt(a + (b - a) * e, c[3]); if (k < 1) requestAnimationFrame(f); };
+    requestAnimationFrame(f);
+  });
+}
+function syncStage(instant){
+  const st = houseState(hasUps());
+  syncHouse($("house"), st, instant);
+  const s = stats();
+  setSpecs($("specs"), s.cells, !instant);
+  if ($("snote")) $("snote").innerHTML = s.note;
+  const v = $("verdict"); if (v) { v.textContent = s.verdict[0]; v.className = "verdict " + s.verdict[1]; v.hidden = !s.verdict[0]; }
+  if ($("kit")) $("kit").innerHTML = kitHTML(hasUps());
+  if ($("stagev")) $("stagev").classList.toggle("hazy", !!st.smoke);
+  if ($("exchip")) $("exchip").hidden = !(S.goal === "explore" && !S.touched);
+  if ($("psum")) $("psum").innerHTML = pbarSum();
+}
+
+/* ---------- landing ---------- */
+const PATHS = [
+  { id:"help", ic:"bill", t:"Lower my bills", d:"Discounts, heating help and a cheaper supplier. No new equipment." },
+  { id:"upgrade", ic:"home", t:"Upgrade my home", d:"Heat pump, solar, battery, electric car. The monthly cost with rebates and loans." },
+  { id:"explore", ic:"compass", t:"Just explore", d:"Start from an example home and change anything." },
+];
+let EX = null, landK = 1, loopT = null;
+function example(){
+  return withState(DEFAULT(), () => { const r = run(), sel = bestPlan(r), p = r.plans[sel]; return { T0:r.bills0 / 12, tot:p.years[2] + r.bills1 / 12, loan:planName(sel), before:houseState(false), after:houseState(true) }; });
+}
+function vLanding(){
+  EX = example();
+  return '<section class="landing">' +
+    '<div class="ltext">' +
+      '<p class="eyebrow">Stoughton Energy &amp; Sustainability Committee</p>' +
+      '<h1>Your house, <span>cheaper to run.</span></h1>' +
+      '<p class="lede">Rebates, discounts and 0% loans for Stoughton homes, worked out for yours in about two minutes. Nothing you type leaves this page.</p>' +
+    '</div>' +
+    '<div class="lart" id="lart"><button type="button" class="flip" data-act="flip" aria-label="Switch between today and all new"><div class="h3d" data-h3d="house0" data-nodrag="1">' + houseSVG("house0") + '</div></button>' +
+      '<div class="ba" id="ba"><span data-k="0"><small>Today</small><b>' + money(EX.T0) + '<small>/mo</small></b></span><span data-k="1"><small>All new, loan included</small><b>' + money(EX.tot) + '<small>/mo</small></b></span></div>' +
+      '<p class="cap">Example: medium oil-heated house with insulation, a heat pump, a heat pump water heater and 8 kW solar, after rebates. Loan: ' + esc(EX.loan) + '.</p>' +
+    '</div>' +
+    '<h2 class="lq">What would you like to do?</h2>' +
+    '<div class="paths">' + PATHS.map(p => '<button type="button" class="path p-' + p.id + '" data-path="' + p.id + '"><span class="pic">' + I[p.ic] + '</span><b>' + p.t + '</b><i aria-hidden="true">→</i><span class="d">' + p.d + '</span></button>').join("") + '</div>' +
+    '<div class="lfoot"><button type="button" class="linkbtn" data-path="broken">Heating or AC broke? Start here</button><button type="button" class="linkbtn" data-act="sessions">Free library sessions, Wednesdays from Oct 21</button></div>' +
+    '</section>';
+}
+function showLand(instant){
+  syncHouse($("house0"), landK ? EX.after : EX.before, instant);
+  if ($("lart")) $("lart").classList.toggle("hazy", !!(landK ? EX.after : EX.before).smoke);
+  const ba = $("ba"); if (ba) ba.querySelectorAll("span[data-k]").forEach(s => s.classList.toggle("on", Number(s.dataset.k) === landK));
+}
+function startLoop(){ landK = 0; showLand(true); if (!RM()) { setTimeout(() => { if (S.screen === "landing") { landK = 1; showLand(); } }, 900); loopT = setInterval(() => { landK = 1 - landK; showLand(); }, 3600); } else { landK = 1; showLand(true); } }
+function stopLoop(){ clearInterval(loopT); loopT = null; }
+
+/* ---------- configurator ---------- */
+const HEADS = {
+  help:["Pay less on your bills", "Three short questions. You get the discounts and programs that fit, with the dollars."],
+  upgrade:["Upgrade your home", "Pick upgrades. You see the loan plus your new bills, next to what you pay today."],
+  explore:["An example home", "A medium oil-heated Stoughton house. Change anything, or open Your home to use yours."],
+  broken:["Heating or AC broke?", "Replace it with a heat pump: rebate first, then a 0% loan for the rest."],
+};
+function vConfig(){
+  return '<div class="studio"><div class="stagev" id="stagev"><div class="stop"><span class="verdict" id="verdict"></span><span class="chip" id="exchip" hidden>Example home</span></div><div class="h3d" data-h3d="house">' + houseSVG("house") + '<span class="hint3d" hidden>Drag to turn the house</span></div>' +
+    '<div class="kit" id="kit"></div><div class="specs" id="specs"></div><p class="snote" id="snote"></p></div>' +
+    '<div class="panel" id="panel"></div></div>';
+}
+const SUMS = {
+  home: () => [S.tenure === "own" ? "Own" : "Rent", BLD[S.building], FUELS[S.heat].t + (S.heat === "heatpump" ? "" : " heat"), HSIZE[S.hsize].t, S.heat === "heatpump" ? "" : COOL[S.cool]].filter(Boolean).join(" · "),
+  bills: () => {
+    const e = estimates(), be = Number(S.billElec), bf = Number(S.billFuel), yearly = S.heat === "oil" || S.heat === "propane";
+    const el = "Electric " + money(be > 0 ? be : e.elec) + "/mo";
+    const fu = ["oil", "propane", "gas"].includes(S.heat) ? " · " + FUELS[S.heat].t + " " + money(bf > 0 ? bf : e.fuel) + (yearly ? "/yr" : "/mo") : "";
+    return (be > 0 || bf > 0 ? "" : "Estimated: ") + el + fu + " · " + SUPPLIERS[S.supplier].t;
+  },
+  people: () => { const t = incomeTier(oldState()); return S.people + (S.people > 1 ? " people" : " person") + " · " + money(S.income) + " · " + (t === "low" ? "Income-eligible" : t === "moderate" ? "Moderate income" : "Standard rebates"); },
+  upgrades: () => { const on = activeUps(); const n = ITEMS.filter(i => on[i.id] && !(i.id === "evc" && on.ev)).map(i => i.id === "solar" ? "Solar " + S.kw + " kW" : SHORT[i.id]); return n.length ? n.join(", ") : "None yet"; },
+  pay: () => { const r = run(); if (r.total <= 0 && !r.leaseAmt) return "Nothing to borrow"; const sel = bestPlan(r); return planName(sel) + " · " + money(r.plans[sel].years[2]) + "/mo" + (r.leaseAmt ? " · group lease" : ""); },
+};
+function renderPanel(keep){
+  const fid = keep && document.activeElement && document.activeElement.id;
+  const L = secs(); if (!L.includes(S.open)) S.open = L[L.length - 1];
+  const oi = L.indexOf(S.open), h = HEADS[S.goal] || HEADS.upgrade;
+  let html = '<div class="phead">' + seg("mode", S.goal === "broken" ? "upgrade" : S.goal, [["help", "Lower bills"], ["upgrade", "Upgrade"], ["explore", "Explore"]], "modes") +
+    '<h1>' + h[0] + '</h1><p>' + h[1] + '</p>' + (S.goal !== "help" && S.tenure === "rent" ? '<p class="note">Renting: new equipment needs your landlord, so this shows the ways to pay less. Programs for landlords are in your plan.</p>' : "") + '</div>';
+  html += L.map((id, i) => {
+    const st = i === oi ? "open" : i < oi ? "done" : "todo";
+    return '<section class="sec ' + st + '" id="sec-' + id + '"><button type="button" class="sech" data-sec="' + id + '" aria-expanded="' + (st === "open") + '"><span class="sn">' + SECT[id] + '</span><span class="ss">' + esc(SUMS[id]()) + '</span><span class="se">Edit</span></button>' +
+      (st === "open" ? '<div class="secb">' + BODIES[id]() + '</div>' : "") + '</section>';
+  }).join("");
+  const last = oi === L.length - 1;
+  html += '<div class="pbar"><div class="sum" id="psum">' + pbarSum() + '</div><button type="button" class="btn" data-act="next">' + (last ? (hasUps() ? "See my plan" : "See how to pay less") : "Continue") + '</button></div>';
+  $("panel").innerHTML = html;
+  if (fid && $(fid)) $(fid).focus({ preventScroll:true });
+}
+function pbarSum(){
+  const r = run(), T0 = r.bills0 / 12;
+  if (hasUps() && (r.rows.length || r.gasoline0)) { const p = r.plans[bestPlan(r)], tot = p.years[2] + r.bills1 / 12, d = tot - T0; return 'All new, loan included<b>' + money(tot) + '/mo<em class="' + (d <= 0.5 ? "good" : "bad") + '">' + (Math.abs(d) < 1 ? "same as today" : (d < 0 ? "−" : "+") + money(Math.abs(d)) + " vs today") + '</em></b>'; }
+  if (hasUps()) return 'Today<b>' + money(T0) + '/mo</b>';
+  return 'You could save<b>' + money(winSum(quickWins())) + '/mo</b>';
+}
+
+/* sections */
+function secHome(){
+  return G("Do you own or rent?", seg("tenure", S.tenure, [["own", "Own"], ["rent", "Rent"]])) +
+    G("Building", seg("building", S.building, Object.entries(BLD))) +
+    G("How do you heat it?", tiles("heat", S.heat, Object.entries(FUELS).map(([v, f]) => ({ v, t:f.t, s:f.s, ic:f.ic })))) +
+    G("Size", seg("hsize", S.hsize, Object.entries(HSIZE).map(([v, h]) => [v, h.t, h.s]))) +
+    (S.heat !== "heatpump" ? G("Cooling now", seg("cool", S.cool, Object.entries(COOL))) : "");
+}
+function billFields(){
+  const e = estimates(), fl = { oil:["Oil, last 12 months", "yr"], propane:["Propane, last 12 months", "yr"], gas:["Gas bill, average month", "mo"] }[S.heat];
+  const f = (id, label, est) => '<div class="field"><label for="' + id + '">' + label + '</label><div class="money"><input type="number" id="' + id + '" min="0" step="1" inputmode="decimal" placeholder="' + Math.round(est).toLocaleString("en-US") + ' (estimate)" value="' + esc(S[id]) + '"></div></div>';
+  return f("billElec", "Electric bill, average month", e.elec) + (fl ? f("billFuel", fl[0], e.fuel) : "");
+}
+function useNote(){
+  const F = FUELS[S.heat], use = heatUse(), fromFuel = Number(S.billFuel) > 0 && ["oil", "propane", "gas"].includes(S.heat);
+  return "Heat about " + Math.round(use).toLocaleString("en-US") + " " + F.unit + " a year (" + (fromFuel ? "from your bill, minus hot water" : "estimated from house size") + "). Other electricity about " + Math.round(baseKwh()).toLocaleString("en-US") + " kWh a month" + (Number(S.billElec) > 0 ? " (from your bill)." : " (estimate).");
+}
+function secBills(){
+  return G("What you pay now", '<div class="fields">' + billFields() + '</div><p class="hint" id="usenote">' + useNote() + '</p>') +
+    (S.heat === "oil" ? G("Oil price", seg("oilp", S.price.oil === OIL.now ? "now" : "winter", [["winter", "$4.09", "last winter"], ["now", "$6.15", "this week"]])) : "") +
+    G("Electric company", seg("utility", S.utility, [["ngrid", "National Grid"], ["eversource", "Eversource"], ["unsure", "Not sure"]])) +
+    G("Supplier (the “Supplier” line on your bill)", seg("supplier", S.supplier, Object.entries(SUPPLIERS).map(([v, o]) => [v, o.t])));
+}
+function bandText(){
+  const s = oldState(), t = incomeTier(s), i = Math.min(Math.max(s.size, 1), 8) - 1;
+  const fa = s.size <= 6 && S.income <= FA[s.size - 1];
+  const parts = [t === "low" ? "Income-eligible: no-cost upgrades, bill discounts" : t === "moderate" ? "Moderate income: bigger Mass Save rebates" : "Standard Mass Save rebates"];
+  if (fa) parts.push("fuel assistance");
+  const e = eshl();
+  if (e.rate != null) parts.push("Energy Saver loan at " + String(e.rate * 100).replace(/^0\./, "0.") + "%");
+  return parts.join(" · ") + ' <span style="opacity:.8">(limits for ' + s.size + (s.size > 1 ? " people: " : " person: ") + money(LOW[i]) + " / " + money(MOD[i]) + ')</span>';
+}
+function secPeople(){
+  const pill = (k, t) => '<button type="button" class="pill" data-toggle="' + k + '" aria-pressed="' + (S[k] ? "true" : "false") + '">' + esc(t) + '</button>';
+  return G("People living here", '<div><div class="stepper"><button type="button" data-act="ppl-" aria-label="Fewer people">−</button><output id="ppl">' + S.people + '</output><button type="button" data-act="ppl+" aria-label="More people">+</button></div></div>') +
+    G("Yearly income, everyone together, before taxes", '<div class="big" id="incbig">' + money(S.income) + (S.income >= 300000 ? "+" : "") + '</div><input type="range" id="income" min="0" max="300000" step="5000" value="' + S.income + '" aria-label="Yearly income"><div class="band" id="band">' + bandText() + '</div>') +
+    G("Any of these?", '<div class="pills">' + pill("benefits", "SNAP, MassHealth, SSI or fuel assistance") + pill("senior", "Someone is 60+ or disabled") + pill("behind", "Behind on a utility bill") + '</div>');
+}
+function netZeroKw(){
+  const r = run({ ...activeUps(), solar:false });
+  return Math.max(2, Math.min(20, Math.ceil(r.kwh1 / PKG.solarYield)));
+}
+function packs(){
+  const gasy = S.heat === "gas" || S.heat === "propane";
+  const nz = { id:"netzero", wide:true, group:true, t:"Net zero, with neighbors", d:(S.heat === "heatpump" ? "Solar sized to your use and a battery" : "Geothermal, solar sized to your use and a battery") + ". A company owns them for 5 years; you pay about what you pay today, then buy them back and own a net-zero house.",
+    up:(S.heat === "heatpump" ? ["wx", "hpwh", "solar", "battery", "panel"] : ["wx", "geo", "hpwh", "solar", "battery", "panel"]).concat(gasy ? ["induction"] : []) };
+  return [nz].concat(packsBase(gasy));
+}
+function packsBase(gasy){
+  if (S.heat === "heatpump") return [
+    { id:"basics", t:"Basics", d:"Insulation and a heat pump water heater", up:["wx", "hpwh"] },
+    { id:"solar", t:"Solar", d:"Basics, " + S.kw + " kW solar and a panel", up:["wx", "hpwh", "solar", "panel"] },
+    { id:"backup", t:"Solar + battery", d:"Plus backup power in outages", up:["wx", "hpwh", "solar", "panel", "battery"] },
+    { id:"all", t:"Everything", d:"Plus an electric car and charger", up:["wx", "hpwh", "solar", "panel", "battery", "ev", "evc"] },
+  ];
+  return [
+    { id:"basics", t:"Basics", d:"Insulation and a heat pump water heater", up:["wx", "hpwh"] },
+    { id:"heat", t:"Heat pump", d:"Basics, whole-home heat pump and panel", up:["wx", "hp", "hpwh", "panel"] },
+    { id:"solar", t:"Heat pump + solar", d:"Plus " + S.kw + " kW rooftop solar", up:["wx", "hp", "hpwh", "panel", "solar"] },
+    { id:"all", t:"Everything", d:"Plus battery and electric car" + (gasy ? ", induction stove" : ""), up:["wx", "hp", "hpwh", "panel", "solar", "battery", "ev", "evc"].concat(gasy ? ["induction"] : []) },
+  ];
+}
+const upKeys = () => Object.keys(S.up).filter(k => S.up[k] && !(k === "hp" && S.heat === "heatpump")).sort().join();
+function secUpgrades(){
+  const cur = upKeys();
+  const cards = packs().map(p => {
+    const on = {}; p.up.forEach(k => on[k] = true);
+    const keep = [S.group, S.kw, S.leaseMode, S.up];
+    if (p.group) { S.group = true; S.leaseMode = "today"; S.up = { ...on }; S.kw = netZeroKw(); } else S.group = false;
+    const q = run(on), pp = q.plans[bestPlan(q)], tot = pp.years[2] + q.bills1 / 12, d = tot - q.bills0 / 12, nzKw = S.kw;
+    [S.group, S.kw, S.leaseMode, S.up] = keep;
+    const checked = [...p.up].sort().join() === cur && !!p.group === !!S.group && (!p.group || S.kw === nzKw);
+    return '<div class="pkg' + (p.wide ? " wide" : "") + '"><input type="radio" name="pack" id="pack-' + p.id + '" value="' + p.id + '"' + (checked ? " checked" : "") + '><label for="pack-' + p.id + '">' + (p.wide ? '<span class="badge">Buy with neighbors · ' + nzKw + ' kW solar</span>' : "") + '<span class="pn">' + p.t + '</span><span class="pd">' + esc(p.d) + '</span><span class="pv num">' + money(tot) + '<i>/mo</i></span><span class="pdl num ' + (d < 1 ? "good" : "bad") + '">' + (Math.abs(d) < 1 ? "Same as today" : (d < 0 ? money(-d) + " less" : money(d) + " more") + " than today") + '</span></label></div>';
+  }).join("");
+  const r = run(), x = inputs(), base = r.bills1;
+  const MAIN = ["wx", "hp", "geo", "hpwh", "solar", "battery", "panel", "ev", "evc"];
+  const vis = it => !(it.id === "hp" && S.heat === "heatpump") && !(it.id === "evc" && !S.up.ev && !S.showMore) && (S.showMore || MAIN.includes(it.id) || S.up[it.id]);
+  const sub = { wx:"Cuts heating about 15%", hp:"Heats and cools the whole house", geo:"Lowest running cost; replaces the air-source", hpwh:"Replaces your water heater",
+    solar:Math.round(S.kw * 1200).toLocaleString("en-US") + " kWh a year", battery:"Backup power; pays about $1,100 a year", panel:"Often needed for heat pump + solar",
+    evc:"Level 2 at home" + (x.evcRebate ? "; up to $700 back by Dec 10" : ""), induction:"No gas burning in the kitchen", laundry:"One machine, no dryer vent", fridge:"Free pickup of an old second fridge" };
+  const rows = ITEMS.filter(vis).map(it => {
+    const on = !!S.up[it.id];
+    const cost = it.id === "solar" ? (S.cost.solar != null ? S.cost.solar : S.kw * 2875) : (S.cost[it.id] != null ? S.cost[it.id] : it.cost);
+    const reb = rebateFor(it.id, cost, { fuel:x.fuel, tier:x.tier, evcRebate:x.evcRebate });
+    const itc = 0, leased = !!(it.itc && S.group);
+    const r2 = run({ ...activeUps(), [it.id]: !on });
+    const delta = on ? (base - r2.bills1 - (it.id === "ev" ? r.gasoline0 - r2.gasoline0 : 0)) / 12 : (r2.bills1 - base - (it.id === "ev" ? r2.gasoline0 - r.gasoline0 : 0)) / 12;
+    const dtxt = Math.abs(delta) < 1 ? "" : (it.id === "ev" ? "gas + charging " : "bills ") + sv(delta) + "/mo";
+    const dhtml = dtxt ? '<span class="dl ' + (delta < 0 ? "good" : "bad") + '">' + esc(dtxt) + '</span>' : "";
+    const line = it.id === "ev" ? "Car price not included" + (dhtml ? " · " + dhtml : "") :
+      esc(cost - reb <= 0 ? "Free after rebates" : money(cost - reb) + (reb > 0 ? " after rebate" : ", no rebate") + (leased ? ", on the group lease" : "")) + " · " + (dhtml || esc(sub[it.id]));
+    let extra = "";
+    if (on && it.id === "hp") extra = '<div class="pills">' + ["ducted", "ductless"].map(v => '<button type="button" class="pill" data-hptype="' + v + '" aria-pressed="' + (S.hpType === v) + '">' + (v === "ducted" ? "Ducted, whole house" : "Ductless mini-splits") + '</button>').join("") + '</div>';
+    if (on && it.id === "solar") { const nz = netZeroKw(); extra = '<div class="stepper"><button type="button" data-act="kw-" aria-label="Smaller solar">−</button><output>' + S.kw + ' kW</output><button type="button" data-act="kw+" aria-label="Bigger solar">+</button></div>' +
+      '<button type="button" class="pill" data-act="kwnz" aria-pressed="' + (S.kw === nz) + '">Match my use: ' + nz + ' kW</button>'; }
+    if (on && it.id === "ev") extra = '<div class="field" style="max-width:190px"><label for="carGas">Gasoline now, a month</label><div class="money"><input type="number" id="carGas" min="0" step="5" inputmode="decimal" placeholder="' + Math.round(S.miles / S.mpg * S.gasPrice / 12) + ' (estimate)" value="' + esc(S.carGas) + '"></div><span class="hint num" id="evmiles">≈ ' + Math.round(carMiles()).toLocaleString("en-US") + ' miles a year</span></div>' +
+      '<div class="field"><span class="gl">Your car now</span><div class="pills">' + [20, 28, 35, 45].map(v => '<button type="button" class="pill" data-mpg="' + v + '" aria-pressed="' + (S.mpg === v) + '">' + v + ' mpg</button>').join("") + '</div></div>';
+    return '<div class="urow' + (extra ? " hassub" : "") + '"><input type="checkbox" id="u-' + it.id + '" data-up="' + it.id + '"' + (on ? " checked" : "") + '><span class="ic">' + I[it.id] + '</span><label class="t" for="u-' + it.id + '">' + esc(it.name) + '</label><span class="s num"' + (it.id === "ev" ? ' id="evline"' : "") + '>' + line + '</span><span class="sw" aria-hidden="true"></span></div>' + (extra ? '<div class="usub">' + extra + '</div>' : "");
+  }).join("");
+  const hidden = ITEMS.filter(it => !vis(it) && it.id !== "hp").length;
+  return G("Start with a package", '<div class="pkgs" role="radiogroup">' + cards + '</div>') +
+    G("Or choose each one", '<div class="ulist">' + rows + '</div>' + (!S.showMore && hidden ? '<div><button type="button" class="linkbtn" data-act="more">More: induction stove, washer-dryer, fridge pickup</button></div>' : ""));
+}
+function leaseText(r, L){
+  const T0 = r.bills0 / 12;
+  if (S.leaseMode === "today") return 'You keep paying about ' + money(T0) + '/mo, what you pay today. After your new bills and loans, ' + money(L.pay) + '/mo goes to the lease. ' +
+    (L.buyout > 1 ? 'At year 5 you buy it back for <b>' + money(L.buyout) + '</b>: cash, or ' + money(L.buyoutPay) + '/mo for 15 years at ' + S.bankRate + '%. To owe nothing at year 5, add ' + money(L.add) + '/mo during the lease.' : 'Paid off within the 5 years; the buy-back is about $0.');
+  return 'Level lease ' + money(L.pay) + '/mo for 5 years. At year 5 you buy it back for <b>' + money(L.buyout) + '</b>: cash, or ' + money(L.buyoutPay) + '/mo for 15 years at ' + S.bankRate + '%.';
+}
+function leaseTimeline(r, wide){
+  if (!r.leaseAmt) return "";
+  const p = r.plans[bestPlan(r)], L = p.lease, T0 = r.bills0 / 12, b1 = r.bills1 / 12, tot = p.years[2] + b1;
+  const own = r.rows.filter(w => w.lease).map(w => SHORT[w.id].toLowerCase()).join(", ").replace(/, ([^,]*)$/, " and $1");
+  const nz = isNZ(r);
+  return '<ol class="tl' + (wide ? " h" : "") + '">' +
+    '<li><span class="k">Years 1–5</span><span class="v">' + money(tot) + '/mo</span><span class="d">A company owns the ' + esc(own) + ' and takes the ' + money(L.credit) + ' federal credit and the tax depreciation. You pay ' + (Math.abs(tot - T0) < 5 ? "about what you pay today" : money(tot) + " a month") + ', lease and bills together.</span></li>' +
+    '<li><span class="k">Year 5</span><span class="v">' + (L.buyout > 1 ? money(L.buyout) : "$0") + '</span><span class="d">' + (L.buyout > 1 ? "You buy it back: cash, or " + money(L.buyoutPay) + "/mo over 15 years at " + S.bankRate + "%." : "Paid off during the lease; nothing left to buy back.") + '</span></li>' +
+    '<li><span class="k">After the buy-back</span><span class="v">' + (nz ? money(billOnly(r)) : mo(b1)) + '/mo</span><span class="d">' + (nz ? "You own it all. Net zero: the solar covers your electricity, so the bill is the $10 connection fee." + (income(r) > 1 ? " SMART and battery payments bring about " + money(income(r)) + "/mo back." : "") : "You own it all and pay only your bills.") + '</span></li></ol>';
+}
+function groupCompare(r){
+  if (!r.leaseAmt) return '<p class="note">Turn on geothermal, a battery or solar in Upgrades to use the group lease.</p>';
+  const L = r.plans[bestPlan(r)].lease;
+  const xo = inputs(); xo.group = { ...xo.group, on:false };
+  const ro = pkgModel(xo);
+  const sum20 = q => { const p = q.plans[bestPlan(q)]; let t = 0; for (let y = 0; y < 20; y++) t += p.years[y] * 12; return t; };
+  const d = sum20(r) - sum20(ro);
+  return '<div class="note num">' + leaseText(r, L) + ' Over 20 years that is ' +
+    (Math.abs(d) < 500 ? "about the same as putting this equipment on your loans." : d < 0 ? '<b class="good">' + money(-d) + ' less</b> than putting this equipment on your loans.' : '<b class="bad">' + money(d) + ' more</b> than putting this equipment on your loans.') + '</div>';
+}
+function secPay(){
+  const r = run(), e = eshl(), P = r.plans;
+  const group = '<div class="ulist"><div class="urow' + (S.group ? " hassub" : "") + '"><input type="checkbox" id="u-group" data-group="1"' + (S.group ? " checked" : "") + '><span class="ic">' + I.group + '</span><label class="t" for="u-group">Buy with neighbors</label><span class="s">A company owns the geothermal, solar and battery for 5 years and takes the federal credit. Then you buy them back and own them.</span><span class="sw" aria-hidden="true"></span></div>' +
+    (S.group ? '<div class="usub col"><div class="pills"><button type="button" class="pill" data-bonus="1" aria-pressed="' + S.groupBonus + '">30% + 10% bonus</button><button type="button" class="pill" data-bonus="0" aria-pressed="' + !S.groupBonus + '">30% only</button></div>' +
+      '<div class="field"><span class="gl">The company sells the credit for</span><div class="pills">' + [0.85, 0.90, 0.95].map(v => '<button type="button" class="pill" data-cprice="' + v + '" aria-pressed="' + (S.credPrice === v) + '">' + Math.round(v * 100) + '¢ per $1</button>').join("") + '</div></div>' +
+      '<div class="pills"><button type="button" class="pill" data-lmode="today" aria-pressed="' + (S.leaseMode === "today") + '">Keep paying what you pay today</button><button type="button" class="pill" data-lmode="level" aria-pressed="' + (S.leaseMode === "level") + '">Level lease payment</button></div>' +
+      '<div class="field" style="max-width:220px"><label for="leaseRate">Company\'s return (%)</label><input type="number" id="leaseRate" min="0" max="15" step="0.25" value="' + S.leaseRate + '"></div>' +
+      leaseTimeline(r, false) + groupCompare(r) + '<p class="hint">The company pays the cost after rebates, sells the federal credit, takes 5-year tax depreciation and earns its return on the rest; the buy-back is what it still has in the equipment at year 5, after the credit\'s 5-year hold. Solar only if running by Dec 31, 2027; the bonus needs U.S.-made content. The contract sets the real numbers.</p></div>' : "") + '</div>';
+  if (r.total <= 0) return (r.leaseAmt ? "" : '<p class="note">Rebates cover what you picked. Nothing to borrow.</p>') + group;
+  const sel = bestPlan(r);
+  const desc = { B: e.rate == null ? "Not available: " + e.why : !planOK(r, "B") ? "Not available: needs $10,000 or more to borrow" : (e.rate * 100 + "% fixed, 20 years; first 18 months " + money(P.B.eshlIO) + "/mo"), A:"0% up to $25,000 over 7 years, the rest on Energy Saver or your bank", C: S.bankRate + "%, " + S.bankYears + " years" };
+  const list = [["B", "Energy Saver loan"], ["A", "0% HEAT Loan first"], ["C", "Your bank"]].map(([v, t]) => {
+    const dis = v !== "C" && !planOK(r, v);
+    return '<div class="orow"><input type="radio" name="plan" id="plan-' + v + '" value="' + v + '"' + (sel === v ? " checked" : "") + (dis ? " disabled" : "") + '><label for="plan-' + v + '"><span class="t">' + t + '</span><span class="s" id="pd-' + v + '">' + esc(desc[v]) + '</span><span class="v num" id="pv-' + v + '">' + (dis ? "" : '<b>' + money(P[v].monthly(40)) + '/mo</b>' + money(Math.max(0, P[v].interest)) + (r.leaseAmt ? " loan interest; monthly includes the lease" : " interest")) + '</span></label></div>';
+  }).join("");
+  return G("You borrow " + money(r.total) + " after rebates", '<div class="olist">' + list + '</div>') +
+    (sel === "C" ? '<div class="fields"><div class="field"><label for="bankRate">Your bank\'s rate (%)</label><input type="number" id="bankRate" min="0" max="20" step="0.25" value="' + S.bankRate + '"></div><div class="field"><label for="bankYears">Years</label><input type="number" id="bankYears" min="1" max="30" step="1" value="' + S.bankYears + '"></div></div>' : "") +
+    group + '<p class="hint">Apply for the HEAT Loan before the work is installed. The Energy Saver loan takes about 45 days to close.</p>';
+}
+const BODIES = { home:secHome, bills:secBills, people:secPeople, upgrades:secUpgrades, pay:secPay };
+
+/* ---------- plan ---------- */
+function savingsCard(r, s){
+  const rows = [], diff = PKG.supplyBasic - PKG.supplyTown;
+  if (S.utility !== "eversource") {
+    if (S.supplier === "town") rows.push(["Town electricity program", "You're on it", "14.34¢ until your Nov 2026 meter read. The new price isn't posted yet."]);
+    else if (S.supplier === "other") rows.push(["Town electricity program", "Compare", "Your supplier's price vs the town's 14.34¢. Some door-to-door contracts jump after a few months."]);
+    else rows.push(["Town electricity program", "−" + money(r.kwh1 * diff / 12) + "/mo", "36.7¢ vs 39.5¢ a kWh with delivery: supply 14.34¢ vs 17.19¢, delivery 22.3¢ either way. Not in the numbers above. Details: stoughton.org/396."]);
+  }
+  if (s.benefits.length > 0 || incomeTier(s) === "low") rows.push(["Discount rate", "−" + money(0.32 * Math.max(0, r.elec1) / 12) + "/mo or more", "32–71% off electricity by income. New levels from Nov 1, 2026. Not in the numbers above."]);
+  if (r.onHP) rows.push(["Heat Pump Rate", "−" + money(r.hpDisc1 / 12) + "/mo", "Included: 31.8¢ instead of 39.5¢ Nov–Apr, on all your electricity."]);
+  if (r.evCredit) rows.push(["EV Off-Peak Charging", "−" + money(r.evCredit / 12) + "/mo", "Included: National Grid pays 5¢/kWh in summer and 3¢ the rest of the year for charging 9 pm–1 pm."]);
+  if (!rows.length) return "";
+  return '<div class="card"><h2>More ways to pay less</h2><div>' + rows.map(q => '<div class="srow"><div class="sh"><b>' + esc(q[0]) + '</b><b class="good num">' + esc(q[1]) + '</b></div><p class="hint">' + esc(q[2]) + '</p></div>').join("") + '</div></div>';
+}
+let planCells = [];
+function vPlan(){
+  const r = run(), s = oldState(), list = programs(s);
+  const yes = list.filter(p => p.st === "yes");
+  const T0 = r.bills0 / 12, b1 = r.bills1 / 12;
+  const up = hasUps() && (r.rows.length > 0 || r.gasoline0 > 0);
+  let head, sub, cells, parts = [];
+  if (up) {
+    const sel = bestPlan(r), p = r.plans[sel], tot = p.years[2] + b1, diff = tot - T0;
+    const nz = isNZ(r);
+    head = nz && r.leaseAmt && Math.abs(diff) < Math.max(15, T0 * 0.03) ? "Pay what you pay now. Buy it back in year 5 and own a net-zero house." :
+      Math.abs(diff) < Math.max(15, T0 * 0.03) ? "All new equipment for about what you pay now." :
+      diff < 0 ? "All new equipment, and " + money(-diff) + " a month less than today." : "All new equipment for " + money(diff) + " a month more than today.";
+    const reb = r.rows.reduce((a, w) => a + w.rebate, 0), itc = r.rows.reduce((a, w) => a + w.itc, 0);
+    const names = SUMS.upgrades().split(", ").map((x, i) => i ? x.charAt(0).toLowerCase() + x.slice(1) : x).join(", ");
+    sub = names + ". Rebates " + money(reb) + (r.total > 0 ? ". You borrow " + money(r.total) + " (" + planName(sel) + ")" : "") + (r.leaseAmt ? ". A company owns " + money(r.leaseAmt) + " of it for 5 years and claims the " + money(itc) + " federal credit; you buy it back for " + money(p.lease.buyout) + " in year 5" : "") + ".";
+    cells = [["Today", T0], ["All new, loan included", tot, tot <= T0 + 0.5 ? "hl" : "lo"], [nz ? "Paid off: connection fee only" : "Paid off", nz ? billOnly(r) : b1]];
+    if (r.leaseAmt) parts.push('<div class="card"><h2>How buying with neighbors works</h2>' + leaseTimeline(r, true) + '</div>');
+    let sum20 = 0; for (let y = 0; y < 20; y++) sum20 += (T0 - p.years[y] - b1) * 12;
+    sum20 += r.stateCredit;
+    parts.push('<div class="card"><h2>Every month for 20 years</h2><p class="hint">' + (sum20 >= 0 ? "Over 20 years you pay <b class=\"good\">" + money(sum20) + " less</b> than staying as you are" : "Over 20 years you pay <b class=\"bad\">" + money(-sum20) + " more</b> than staying as you are") + ", and you own the new equipment. Loan paid off in year " + Math.ceil(p.lastMonth / 12) + '.</p><div class="legend"><span><i style="background:var(--c-bills)"></i>Utility bills' + (r.gasoline0 ? " and charging" : "") + '</span><span><i style="background:var(--c-loan)"></i>Loan</span><span><i class="dash"></i>Today</span></div><div class="chartwrap" id="cw"><div class="tip" id="tip" hidden></div><div id="chart"></div></div></div>');
+    parts.push(firstCard(list));
+    parts.push(payCard(r, p, sel));
+    parts.push(savingsCard(r, s));
+  } else {
+    const W = quickWins().sort((a, b) => (b.check ? 0 : b.save) - (a.check ? 0 : a.save)), sum = winSum(W);
+    head = sum >= 5 ? "About " + money(sum) + " a month less, without new equipment." : "You likely qualify for " + yes.length + " program" + (yes.length === 1 ? "" : "s") + ".";
+    sub = "Each step is a short online form or a visit. Start at the top.";
+    cells = [["Today", T0], ["After these steps", T0 - sum, sum > 0 ? "hl" : ""], ["Likely programs", yes.length, "", "count"]];
+    parts.push('<div class="card"><h2>Do these now</h2><ol class="wins">' + W.map(w => '<li><div class="wh"><b>' + esc(w.t) + '</b><b class="good num">' + (w.save > 0.5 ? (w.check ? "Worth " : "") + "−" + money(w.save) + "/mo" + (w.more ? " or more" : "") : esc(w.label || "")) + '</b></div><p class="hint">' + esc(w.how) + '</p><div>' + phones(w.c) + '</div></li>').join("") + '</ol></div>');
+    if (S.tenure === "own") parts.push('<div class="card cta"><div><h2>Thinking about new equipment?</h2><p class="hint">See the monthly cost of a heat pump, solar or an electric car, with rebates and 0% loans, next to what you pay today.</p></div><button type="button" class="btn" data-act="toupgrade">See the monthly cost</button></div>');
+  }
+  planCells = cells;
+  parts.push(progsCard(list), tuneCard(r, up));
+  parts.push('<div class="acts"><button type="button" class="btn" data-act="copy">Copy my plan</button><button type="button" class="btn ghost" data-act="edit">Change answers</button><span class="hint" id="copystat"></span></div><textarea id="plantext" hidden readonly style="width:100%;min-height:160px"></textarea>');
+  return '<div class="plan"><button type="button" class="back" data-act="edit">‹ Change answers</button>' +
+    '<div class="phero"><div><h1>' + esc(head) + '</h1><p class="lede">' + esc(sub) + '</p><div class="specs" id="pspecs"></div></div><div class="part' + (houseState(hasUps()).smoke ? " hazy" : "") + '"><div class="h3d" data-h3d="house2">' + houseSVG("house2") + '<span class="hint3d" hidden>Drag to turn</span></div></div></div>' +
+    parts.join("") + '</div>';
+}
+function firstCard(list){
+  const firsts = list.filter(p => p.st === "yes" || p.st === "maybe").slice(0, 3);
+  return '<div class="card"><h2>Your next steps</h2><ol class="first">' + firsts.map(p => '<li><b>' + esc(p.title) + '</b><span class="hint">' + esc(p.steps[0] || p.get) + '</span><div>' + phones((p.contacts || []).slice(0, 1)) + '</div></li>').join("") + '</ol></div>';
+}
+function payCard(r, p, sel){
+  const where = w => w.lease ? "Group lease" : sel === "C" ? "Bank" : sel === "B" ? (p.eshl > 0 ? "Energy Saver" : "Bank") : (w.heat && p.heat > 0 ? "HEAT Loan" : p.eshl > 0 ? "Energy Saver" : "Bank");
+  const hasItc = r.rows.some(w => w.itc > 0), T0 = r.bills0 / 12, b1 = r.bills1 / 12;
+  return '<div class="card"><h2>What you pay</h2>' + (r.rows.length ? '<div class="twrap"><table><thead><tr><th>Upgrade</th><th class="r">Cost</th><th class="r">Rebate</th>' + (hasItc ? '<th class="r">Company\'s credit</th>' : "") + '<th class="r">You pay</th><th>Paid by</th></tr></thead><tbody>' +
+    r.rows.map(w => '<tr><td>' + esc(w.name) + (w.id === "solar" ? " (" + S.kw + " kW)" : "") + '</td><td class="r">' + money(w.cost) + '</td><td class="r">' + money(w.rebate) + '</td>' + (hasItc ? '<td class="r">' + (w.itc ? money(w.itc) : "") + '</td>' : "") + '<td class="r">' + (w.lease ? "Lease" : mo(w.net)) + '</td><td>' + (w.net > 0 ? where(w) : "") + '</td></tr>').join("") +
+    '<tr class="tot"><td>Total</td><td class="r">' + money(r.rows.reduce((a, w) => a + w.cost, 0)) + '</td><td class="r">' + money(r.rows.reduce((a, w) => a + w.rebate, 0)) + '</td>' + (hasItc ? '<td class="r">' + money(r.rows.reduce((a, w) => a + w.itc, 0)) + '</td>' : "") + '<td class="r">' + money(r.total + r.leaseAmt) + '</td><td></td></tr></tbody></table></div>' : "") +
+    (hasItc && r.leaseAmt ? '<p class="note num"><b>Group lease, then you own it:</b> ' + leaseText(r, p.lease) + ' The company claims ' + Math.round((PKG.itcBase + (S.groupBonus ? PKG.itcBonus : 0)) * 100) + '%, sells it for ' + Math.round(S.credPrice * 100) + '¢ per $1 and earns ' + S.leaseRate + '% a year. The contract sets the real lease and buy-back price.</p>' : "") +
+    '<div class="twrap"><table><thead><tr><th>Energy bills per month</th><th class="r">Today</th><th class="r">All new</th></tr></thead><tbody>' +
+    '<tr><td>Electricity supply (' + (r.sup * 100).toFixed(2) + '¢ × ' + Math.round(r.kwh0 / 12).toLocaleString("en-US") + ' → ' + Math.round(r.kwh1 / 12).toLocaleString("en-US") + ' kWh a month)</td><td class="r">' + money(r.supply0 / 12) + '</td><td class="r">' + money(r.supply1 / 12) + '</td></tr>' +
+    '<tr><td>Delivery, National Grid (22.3¢ a kWh + $10)</td><td class="r">' + money((PKG.elecCust * 12 + r.kwh0 * PKG.dStd) / 12) + '</td><td class="r">' + money((PKG.elecCust * 12 + r.kwh1 * PKG.dStd) / 12) + '</td></tr>' +
+    (r.hpDisc0 || r.hpDisc1 ? '<tr><td>Heat Pump Rate, lower delivery Nov–Apr</td><td class="r good">' + (r.hpDisc0 ? "−" + money(r.hpDisc0 / 12) : "") + '</td><td class="r good">−' + money(r.hpDisc1 / 12) + '</td></tr>' : "") +
+    (r.evCredit ? '<tr><td>EV Off-Peak Charging credit</td><td class="r"></td><td class="r good">−' + money(r.evCredit / 12) + '</td></tr>' : "") +
+    (r.solarValue ? '<tr><td>Solar credits and SMART</td><td class="r"></td><td class="r good">−' + money((r.solarValue + r.smart) / 12) + '</td></tr>' : "") +
+    (r.cs ? '<tr><td>Battery payments</td><td class="r"></td><td class="r good">−' + money(r.cs / 12) + '</td></tr>' : "") +
+    (S.heat !== "heatpump" && S.heat !== "electric" ? '<tr><td>' + FUELS[S.heat].t + '</td><td class="r">' + money((r.fuel0 + r.gas0) / 12) + '</td><td class="r">' + money((r.fuel1 + r.gas1) / 12) + '</td></tr>' : "") +
+    (r.gasoline0 ? '<tr><td>Gasoline (' + Math.round(carMiles()).toLocaleString("en-US") + ' miles, ' + S.mpg + ' mpg)</td><td class="r">' + money(r.gasoline0 / 12) + '</td><td class="r">$0</td></tr>' : "") +
+    '<tr class="tot"><td>Total</td><td class="r">' + money(T0) + '</td><td class="r">' + mo(b1) + '</td></tr></tbody></table></div>' +
+    (S.up.ev ? '<p class="hint">Car price not included. MOR-EV rebate: $3,500 for a new EV up to $55,000, plus $1,500 if income-qualified and $1,000 with a trade-in (mor-ev.org).</p>' : "") +
+    (r.stateCredit ? '<p class="hint">Plus a one-time ' + money(r.stateCredit) + ' state solar tax credit.</p>' : "") + '</div>';
+}
+function progsCard(list){
+  const progItem = p =>
+    '<details class="prog"><summary><span class="dot ' + p.st + '"></span><span class="pt">' + esc(p.title) + '</span><span class="chev">›</span><span class="pg">' + esc(p.get) + '</span></summary><div class="body">' +
+    (p.why ? '<p class="hint">' + esc(p.why) + '</p>' : "") + (p.steps.length ? '<ol>' + p.steps.map(z => '<li>' + esc(z) + '</li>').join("") + '</ol>' : "") +
+    (p.contacts && p.contacts.length ? '<div>' + phones(p.contacts) + '</div>' : "") + (p.star ? '<p class="hint">* ' + esc(STAR) + '</p>' : "") + '</div></details>';
+  const GROUPS = [
+    ["Pay less on your bills", ["discount", "fuel", "arrears", "supplier", "hprate", "coa"]],
+    ["Mass Save, loans and repairs", ["replace", "assessment", "verm", "loans"]],
+    ["Rebates for new equipment", ["heatpump", "water", "appliances", "geo", "solar", "battery", "ev", "group"]],
+  ];
+  const known = GROUPS.flatMap(g => g[1]);
+  return '<div class="card"><h2>Everything you may qualify for</h2>' + GROUPS.map((g, gi) => {
+    const items = list.filter(p => g[1].includes(p.id) || (gi === GROUPS.length - 1 && !known.includes(p.id)));
+    return items.length ? '<div><h3 class="ghead">' + g[0] + '</h3>' + items.map(progItem).join("") + '</div>' : "";
+  }).join("") + '<p class="hint">Green: likely. Orange: worth checking. Grey: good to know. Tap a line for the steps and where to apply.</p></div>';
+}
+function tuneCard(r, up){
+  return '<div class="card"><details class="more"><summary>Fine-tune the numbers</summary><div class="fields" style="margin-top:14px">' + billFields() +
+    (S.heat !== "heatpump" ? '<div class="field"><label for="f-price">' + FUELS[S.heat].t + ' price ($ per ' + FUELS[S.heat].unit.replace(/s$/, "") + ')</label><input type="number" id="f-price" step="0.01" min="0" value="' + S.price[S.heat] + '"></div>' : "") +
+    '<div class="field"><label for="f-exact">Heat used last year (' + FUELS[S.heat].unit + ')</label><input type="number" id="f-exact" step="10" min="0" value="' + Math.round(heatUse()) + '"></div>' +
+    '<div class="field"><label for="f-base">Other electricity (kWh a month)</label><input type="number" id="f-base" step="50" min="0" value="' + Math.round(baseKwh()) + '"></div>' +
+    '<div class="field"><label for="f-supply">Supply price ($/kWh; 22.3¢ delivery added)</label><input type="number" id="f-supply" step="0.001" min="0" value="' + S.supply + '"></div>' +
+    (S.up.ev && up ? '<div class="field"><label for="carGas">Gasoline now, a month ($)</label><input type="number" id="carGas" min="0" step="5" inputmode="decimal" placeholder="' + Math.round(S.miles / S.mpg * S.gasPrice / 12) + '" value="' + esc(S.carGas) + '"></div><div class="field"><label for="f-gas">Gasoline ($/gal)</label><input type="number" id="f-gas" step="0.01" min="0" value="' + S.gasPrice + '"></div>' : "") +
+    (up ? r.rows.map(w => '<div class="field"><label for="f-c-' + w.id + '">' + esc(w.name) + ' cost ($)</label><input type="number" id="f-c-' + w.id + '" data-costid="' + w.id + '" step="100" min="0" value="' + Math.round(w.cost) + '"></div>').join("") : "") +
+    '</div><p class="hint" style="margin-top:10px">Changes update the plan right away. See “How the numbers work” at the bottom of the page.</p></details></div>';
+}
+function niceStep(v){ const e = Math.pow(10, Math.floor(Math.log10(Math.max(v, 1)))); const f = v / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * e; }
+function drawChart(){
+  const el = $("chart"); if (!el) return;
+  const r = run(), p = r.plans[bestPlan(r)], T0 = r.bills0 / 12, b1 = r.bills1 / 12;
+  const W = Math.max(300, Math.round($("cw").clientWidth - 16 || 640)), H = 240, L = 46, R = 64, T = 12, B = 28, Y = 20;
+  const rows = p.years.slice(0, Y).map((l, i) => ({ y:i + 1, l, b:b1, t:l + b1 }));
+  const top0 = Math.max(T0, ...rows.map(q => q.t), 50), st = niceStep(top0 / 4), top = Math.ceil(top0 / st) * st;
+  const slot = (W - L - R) / Y, bw = Math.max(5, slot - 5), yv = v => T + (H - T - B) * (1 - v / top);
+  let g = "";
+  for (let v = 0; v <= top + 0.1; v += st) g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + yv(v) + '" y2="' + yv(v) + '" style="stroke:var(--line)"/><text x="' + (L - 6) + '" y="' + (yv(v) + 4) + '" text-anchor="end" font-size="11" style="fill:var(--muted)">$' + Math.round(v).toLocaleString("en-US") + '</text>';
+  let bars = "", hits = "";
+  rows.forEach((q, i) => {
+    const x0 = L + i * slot + (slot - bw) / 2, bp = Math.max(0, q.b), lp = Math.max(0, q.l + Math.min(0, q.b));
+    if (bp > 0) bars += '<rect x="' + x0 + '" y="' + yv(bp) + '" width="' + bw + '" height="' + (yv(0) - yv(bp)) + '" rx="2" style="fill:var(--c-bills)"/>';
+    if (lp > 0.5) { const yt = yv(bp + lp), yb = yv(bp) - (bp > 0 ? 2 : 0); if (yb - yt > 0.5) bars += '<rect x="' + x0 + '" y="' + yt + '" width="' + bw + '" height="' + (yb - yt) + '" rx="2" style="fill:var(--c-loan)"/>'; }
+    if ([1, 5, 10, 15, 20].includes(q.y)) bars += '<text x="' + (x0 + bw / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="11" style="fill:var(--muted)">' + (q.y === 1 ? "Year 1" : q.y) + '</text>';
+    hits += '<rect data-i="' + i + '" x="' + (L + i * slot) + '" y="' + T + '" width="' + slot + '" height="' + (H - T - B) + '" fill="transparent"/>';
+  });
+  const ty = yv(T0);
+  const line = '<line x1="' + L + '" x2="' + (W - R + 4) + '" y1="' + ty + '" y2="' + ty + '" style="stroke:var(--ink)" stroke-width="2" stroke-dasharray="6 4"/><text x="' + (W - R + 8) + '" y="' + (ty + 4) + '" font-size="11" font-weight="600" style="fill:var(--ink)">Today</text>';
+  el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Loan plus utility bills each month for 20 years, against today\'s bills">' + g + bars + line + hits + '</svg>';
+  const tip = $("tip"), cw = $("cw");
+  el.querySelectorAll("rect[data-i]").forEach(h => {
+    const show = () => {
+      const q = rows[+h.dataset.i];
+      tip.innerHTML = '<b>Year ' + q.y + '</b><br>Loan ' + money(q.l) + '<br>Bills ' + mo(q.b) + '<br><b>' + mo(q.t) + '/mo</b> vs today ' + money(T0);
+      tip.hidden = false;
+      const wr = cw.getBoundingClientRect(), hr = h.getBoundingClientRect();
+      let left = hr.left - wr.left + hr.width + 6; if (left + 170 > wr.width) left = hr.left - wr.left - 176;
+      tip.style.left = Math.max(0, left) + "px"; tip.style.top = "6px";
+    };
+    h.addEventListener("mouseenter", show); h.addEventListener("click", show);
+    h.addEventListener("mouseleave", () => { tip.hidden = true; });
+  });
+}
+function copyPlan(){
+  const r = run(), s = oldState(), list = programs(s).filter(p => p.st !== "info");
+  let t = "My Stoughton energy plan (" + new Date().toLocaleDateString("en-US") + ")\n\n";
+  if (hasUps() && r.rows.length) {
+    const p = r.plans[bestPlan(r)];
+    t += "Today: " + money(r.bills0 / 12) + "/mo. All new: " + money(p.years[2] + r.bills1 / 12) + "/mo (loan " + money(p.years[2]) + " + bills " + mo(r.bills1 / 12) + "). After the loan: " + mo(r.bills1 / 12) + "/mo.\n";
+    t += "Upgrades: " + r.rows.map(w => w.name + " " + money(w.cost) + " − rebate " + money(w.rebate)).join("; ") + ". Borrow " + money(r.total) + ".\n\n";
+  } else {
+    const W = quickWins();
+    t += "Ways to pay less:\n" + W.map(w => "- " + w.t + (w.save > 0.5 ? " (" + money(w.save) + "/mo)" : "") + (w.c && w.c.length ? ": " + w.c.map(c => c[1]).join("; ") : "")).join("\n") + "\n\n";
+  }
+  t += list.map((p, n) => (n + 1) + ". " + p.title + ": " + p.get + (p.steps[0] ? "\n   Next: " + p.steps[0] : "") + (p.contacts && p.contacts.length ? "\n   Online: " + p.contacts.map(c => c[0] + " " + c[1]).join("; ") : "")).join("\n\n");
+  t += "\n\nScreening only; the programs decide. Checked Sept 24, 2026.";
+  const ta = $("plantext"), stt = $("copystat");
+  if (ta) ta.value = t;
+  const fallback = () => { if (ta) { ta.hidden = false; ta.focus(); ta.select(); } if (stt) stt.textContent = "Select the text below and copy it."; };
+  try { navigator.clipboard.writeText(t).then(() => { if (stt) stt.textContent = "Copied. Paste it into an email or a note."; }, fallback); } catch (e) { fallback(); }
+}
+
+/* ---------- 3D house (three.js r128, loaded from cdnjs); the flat drawing stays as the fallback ---------- */
+const H3 = {}, LAST = {};
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const tcol = n => new THREE.Color(cssv(n) || "#888888").convertSRGBToLinear();
+function can3D(){
+  try { if (!window.THREE) return false; const c = document.createElement("canvas"); return !!(c.getContext("webgl") || c.getContext("experimental-webgl")); } catch (e) { return false; }
+}
+const MATS = { grass:"--st-grass", soil:"--st-soil", wall:"--st-wall", roof:"--st-roof", trim:"--st-trim", door:"--st-door", glass:"--st-glass", solar:"--st-solar",
+  unit:"--st-unit", insul:"--st-insul", loop:"--st-loop", tank:"--st-tank", tree:"--st-tree", trunk:"--st-trunk", far:"--st-far", drive:"--st-drive", smoke:"--st-smoke", brick:"--st-brick", accent:"--st-ev" };
+
+class House3D {
+  constructor(wrap, id, opts){
+    this.wrap = wrap; this.id = id; this.opts = opts || {}; this.g = {}; this.cols = 0; this.visible = true; this.dirty = true;
+    this.az = 0.42; this.azBase = 0.42; this.t0 = performance.now(); this.last = 0; this.evT = 0; this.evV = 0;
+    const R = this.renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, powerPreference:"low-power" });
+    R.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    R.outputEncoding = THREE.sRGBEncoding; R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.05;
+    R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap;
+    R.domElement.setAttribute("aria-hidden", "true");
+    wrap.appendChild(R.domElement);
+    this.scene = new THREE.Scene();
+    this.cam = new THREE.PerspectiveCamera(26, 1.6, 1, 400);
+    this.target = new THREE.Vector3(0.9, 2.0, 1.4);
+    this.mats = {};
+    Object.keys(MATS).forEach(k => {
+      this.mats[k] = new THREE.MeshStandardMaterial({ color:0x888888, roughness: k === "solar" ? 0.35 : k === "glass" ? 0.2 : 0.85, metalness: k === "solar" ? 0.5 : 0, flatShading: k === "tree" });
+    });
+    this.mats.insulShell = new THREE.MeshStandardMaterial({ color:0xffcc66, transparent:true, opacity:0.16, depthWrite:false, roughness:1 });
+    this.mats.smoke.transparent = true; this.mats.smoke.depthWrite = false;
+    this.mats.exh = new THREE.MeshStandardMaterial({ color:0x999999, transparent:true, depthWrite:false, roughness:1 });
+    this.mats.tire = new THREE.MeshStandardMaterial({ color:new THREE.Color("#1A1C1F").convertSRGBToLinear(), roughness:0.9 });
+    this.mats.dark = new THREE.MeshStandardMaterial({ color:new THREE.Color("#23272E").convertSRGBToLinear(), roughness:0.6 });
+    this.mats.cabin = new THREE.MeshStandardMaterial({ color:new THREE.Color("#18202B").convertSRGBToLinear(), roughness:0.15, metalness:0.3 });
+    this.mats.light = new THREE.MeshStandardMaterial({ color:0xffffff, emissive:0xffffff, emissiveIntensity:0.8 });
+    this.mats.car = new THREE.MeshStandardMaterial({ color:0x999999, roughness:0.35, metalness:0.25 });
+    this.edgeMat = new THREE.LineBasicMaterial({ color:0xffcc66, transparent:true, opacity:0.9 });
+    this.build(); this.recolor(); this.resize();
+    this.ro = new ResizeObserver(() => this.resize()); this.ro.observe(wrap);
+    this.io = new IntersectionObserver(es => { this.visible = es[0].isIntersecting; if (this.visible) this.dirty = true; }); this.io.observe(wrap);
+    if (!this.opts.noDrag) this.bindDrag();
+    this.tick = this.tick.bind(this); this.raf = requestAnimationFrame(this.tick);
+  }
+  box(w, h, d, mat, x, y, z, parent, cast){
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z);
+    m.castShadow = cast !== false; m.receiveShadow = true; (parent || this.scene).add(m); return m;
+  }
+  cyl(r1, r2, h, mat, x, y, z, parent, seg){
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, h, seg || 20), mat); m.position.set(x, y, z);
+    m.castShadow = true; m.receiveShadow = true; (parent || this.scene).add(m); return m;
+  }
+  group(name, kind){ const g = new THREE.Group(); g.userData = { t:0, v:0, kind: kind || "grow" }; this.scene.add(g); this.g[name] = g; return g; }
+  house(parent, s, wallMat, roofMat, withRoofCaps){
+    // walls + gable roof; s = scale
+    this.box(11 * s, 6 * s, 7 * s, wallMat, 0, 3 * s, 0, parent);
+    const sh = new THREE.Shape(); sh.moveTo(-4.1 * s, 0); sh.lineTo(4.1 * s, 0); sh.lineTo(0, 3.2 * s); sh.lineTo(-4.1 * s, 0);
+    const rg = new THREE.ExtrudeGeometry(sh, { depth: 11.6 * s, bevelEnabled:false }); rg.rotateY(Math.PI / 2); rg.translate(-5.8 * s, 6 * s, 0);
+    const roof = new THREE.Mesh(rg, withRoofCaps ? [wallMat, roofMat] : roofMat); roof.castShadow = true; roof.receiveShadow = true; parent.add(roof);
+  }
+  build(){
+    const s = this.scene, m = this.mats;
+    this.hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.8); s.add(this.hemi);
+    const sun = this.sun = new THREE.DirectionalLight(0xffffff, 1.3); sun.position.set(16, 28, 20); sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024); const sc = sun.shadow.camera; sc.left = -24; sc.right = 24; sc.top = 20; sc.bottom = -20; sc.near = 1; sc.far = 90;
+    sun.shadow.bias = -0.0005; sun.shadow.normalBias = 0.03; s.add(sun); s.add(sun.target);
+    // diorama block: grass on top, soil on the sides (the front face shows the ground loops)
+    const slab = new THREE.Mesh(new THREE.BoxGeometry(31, 3, 21), [m.soil, m.soil, m.grass, m.soil, m.soil, m.soil]);
+    slab.position.set(0.6, -1.5, 0.5); slab.receiveShadow = true; s.add(slab);
+    this.box(4.6, 0.08, 9.2, m.drive, 10.3, 0.04, 6.3, s, false);
+    this.box(1.7, 0.06, 7.2, m.drive, 0, 0.03, 7.3, s, false);
+    // the house
+    const H = new THREE.Group(); s.add(H); this.house(H, 1, m.wall, m.roof, true);
+    this.box(0.9, 3.4, 0.9, m.brick, -3.4, 8.0, -1.8, H);
+    const win = (x, y) => { this.box(1.7, 1.9, 0.1, m.trim, x, y, 3.53, H, false); this.box(1.4, 1.6, 0.12, m.glass, x, y, 3.56, H, false); };
+    [[-3.4, 4.4], [0, 4.4], [3.4, 4.4], [-3.4, 1.9], [3.4, 1.9]].forEach(p => win(p[0], p[1]));
+    [[4.4], [1.9]].forEach(p => { this.box(0.1, 1.9, 1.7, m.trim, 5.53, p[0], -0.9, H, false); this.box(0.12, 1.6, 1.4, m.glass, 5.56, p[0], -0.9, H, false); });
+    this.box(1.3, 2.5, 0.12, m.door, 0, 1.25, 3.56, H);
+    this.box(2.4, 0.24, 1.1, m.trim, 0, 0.12, 4.05, H);
+    // trees (low-poly)
+    [[-10.8, 3.6, 1], [-12.6, -2.2, 0.8], [13.2, -1.2, 0.9]].forEach(([x, z, k]) => {
+      this.cyl(0.18 * k, 0.24 * k, 1.8 * k, m.trunk, x, 0.9 * k, z);
+      const c = new THREE.Mesh(new THREE.IcosahedronGeometry(1.6 * k, 0), m.tree); c.position.set(x, 2.8 * k, z); c.castShadow = true; s.add(c);
+    });
+    // neighbors (buy together)
+    const nb = this.group("group", "pop");
+    [[-11.2, -6.4, 0.62], [11.8, -6.6, 0.6]].forEach(([x, z, k]) => { const h = new THREE.Group(); h.position.set(x, 0, z); nb.add(h); this.house(h, k, m.far, m.roof, true); });
+    // insulation: warm shell + edges + attic layer
+    const wx = this.group("wx", "fade");
+    const shell = new THREE.Mesh(new THREE.BoxGeometry(11.5, 6.4, 7.5), m.insulShell); shell.position.set(0, 3.2, 0); wx.add(shell);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(11.5, 6.4, 7.5)), this.edgeMat); edges.position.copy(shell.position); wx.add(edges);
+    this.box(11.2, 0.28, 7.2, m.insul, 0, 6.1, 0, wx, false);
+    // solar (rebuilt when size changes)
+    this.group("solar", "grow");
+    // smoke from the chimney
+    const sm = this.group("smoke", "fade"); this.puffs = [];
+    for (let i = 0; i < 5; i++) { const p = new THREE.Mesh(new THREE.IcosahedronGeometry(0.42, 1), m.smoke); p.userData.ph = i / 5; sm.add(p); this.puffs.push(p); }
+    // heat pump outdoor unit
+    const hp = this.group("hp", "pop"); hp.position.set(7.0, 0, -1.3);
+    this.box(1.45, 1.15, 0.62, m.unit, 0, 0.64, 0, hp);
+    const fan = this.cyl(0.42, 0.42, 0.06, m.dark, -0.12, 0.66, 0.33, hp, 24); fan.rotation.x = Math.PI / 2;
+    this.box(0.08, 0.9, 0.05, m.dark, 0.5, 0.64, 0.33, hp, false);
+    this.box(1.3, 0.1, 0.1, m.dark, -1.0, 0.95, 0, hp, false);
+    // central AC condenser (before)
+    const cac = this.group("cac", "pop"); cac.position.set(7.0, 0, -1.3);
+    this.box(1.05, 0.95, 1.05, m.unit, 0, 0.5, 0, cac);
+    const cf = this.cyl(0.36, 0.36, 0.05, m.dark, 0, 1.0, 0, cac, 20);
+    // window AC (before)
+    const wac = this.group("wac", "pop"); this.box(1.0, 0.55, 0.75, m.unit, -3.4, 3.3, 3.9, wac);
+    // battery on the right wall
+    const bat = this.group("bat", "grow"); this.box(0.32, 1.9, 1.1, m.unit, 5.68, 1.25, 2.2, bat);
+    this.box(0.04, 0.5, 0.16, m.accent, 5.86, 1.5, 2.2, bat, false);
+    // oil tank, propane tank, gas meter (before)
+    const oil = this.group("oil", "pop"); oil.position.set(-7.4, 0, 0.6);
+    const ot = this.cyl(0.62, 0.62, 2.1, m.tank, 0, 0.86, 0, oil, 22); ot.rotation.z = Math.PI / 2;
+    this.box(0.14, 0.3, 0.14, m.dark, 0.7, 0.15, 0, oil); this.box(0.14, 0.3, 0.14, m.dark, -0.7, 0.15, 0, oil);
+    const pro = this.group("propane", "pop"); pro.position.set(-7.4, 0, 0.6);
+    const pt = this.cyl(0.62, 0.62, 1.8, m.unit, 0, 0.8, 0, pro, 22); pt.rotation.z = Math.PI / 2;
+    [-0.9, 0.9].forEach(x => { const e = new THREE.Mesh(new THREE.SphereGeometry(0.62, 20, 12), m.unit); e.position.set(x, 0.8, 0); e.castShadow = true; pro.add(e); });
+    const gm = this.group("gasm", "pop"); this.box(0.26, 0.7, 0.48, m.unit, -5.68, 1.1, 1.8, gm); this.cyl(0.06, 0.06, 0.8, m.dark, -5.68, 0.4, 1.8, gm, 10);
+    // car on the driveway (turns into the EV colour)
+    const car = new THREE.Group(); car.position.set(10.3, 0, 7.4); s.add(car); this.car = car;
+    this.box(2.0, 0.72, 4.4, m.car, 0, 0.72, 0, car);
+    this.box(1.8, 0.52, 2.2, m.cabin, 0, 1.33, -0.45, car);
+    this.box(1.7, 0.08, 1.9, m.car, 0, 1.63, -0.45, car);
+    [[1.02, 1.45], [-1.02, 1.45], [1.02, -1.45], [-1.02, -1.45]].forEach(([x, z]) => { const w = this.cyl(0.42, 0.42, 0.32, m.tire, x, 0.42, z, car, 18); w.rotation.z = Math.PI / 2; });
+    this.box(0.5, 0.14, 0.05, m.light, 0.62, 0.86, 2.21, car, false); this.box(0.5, 0.14, 0.05, m.light, -0.62, 0.86, 2.21, car, false);
+    const ex = this.group("exh", "fade"); this.exh = [];
+    for (let i = 0; i < 3; i++) { const p = new THREE.Mesh(new THREE.IcosahedronGeometry(0.22, 1), m.exh); p.userData.ph = i / 3; ex.add(p); this.exh.push(p); }
+    // EV charger + cable
+    const evc = this.group("evc", "grow"); evc.position.set(8.0, 0, 4.6);
+    this.box(0.36, 1.4, 0.3, m.unit, 0, 0.7, 0, evc); this.box(0.24, 0.24, 0.03, m.accent, 0, 1.12, 0.17, evc, false);
+    const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0.95, 0.16), new THREE.Vector3(0.4, 0.35, 0.8), new THREE.Vector3(1.0, 0.25, 1.6), new THREE.Vector3(1.28, 0.8, 2.2)]);
+    const cab = new THREE.Mesh(new THREE.TubeGeometry(curve, 24, 0.05, 8, false), m.dark); evc.add(cab);
+    // geothermal loops in the cut-away ground (front face of the block)
+    const geo = this.group("geo", "grow"); geo.position.set(0, 0, 11.03);
+    [-3.4, -0.5, 2.4].forEach(x => {
+      const pts = [new THREE.Vector3(x, -0.05, 0), new THREE.Vector3(x, -2.1, 0), new THREE.Vector3(x + 0.4, -2.6, 0), new THREE.Vector3(x + 0.8, -2.1, 0), new THREE.Vector3(x + 0.8, -0.05, 0)];
+      const t = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 40, 0.1, 10, false), m.loop); geo.add(t);
+    });
+    this.box(7.2, 0.12, 0.12, m.loop, -0.1, -0.12, 0, geo, false);
+    Object.values(this.g).forEach(g => this.apply(g));
+  }
+  buildSolar(cols){
+    const g = this.g.solar; while (g.children.length) { const c = g.children.pop(); c.geometry.dispose(); }
+    const th = Math.atan2(3.2, 4.1), L = Math.hypot(3.2, 4.1), n = new THREE.Vector3(0, Math.cos(th), Math.sin(th));
+    const pw = 1.02, gap = 0.08, total = cols * (pw + gap) - gap;
+    [1.35, 3.25].forEach(sAlong => {
+      const base = new THREE.Vector3(0, 6 + (sAlong / L) * 3.2, 4.1 - (sAlong / L) * 4.1).add(n.clone().multiplyScalar(0.09));
+      for (let i = 0; i < cols; i++) {
+        const p = new THREE.Mesh(new THREE.BoxGeometry(pw, 0.06, 1.72), this.mats.solar);
+        p.position.set(-total / 2 + pw / 2 + i * (pw + gap) + 0.3, base.y, base.z); p.rotation.x = th; p.castShadow = true; p.receiveShadow = true; g.add(p);
+      }
+    });
+    this.cols = cols; this.apply(g);
+  }
+  apply(g){
+    const v = g.userData.v, k = g.userData.kind;
+    g.visible = v > 0.01;
+    if (k === "grow") g.scale.set(1, Math.max(0.001, v), 1);
+    else if (k === "pop") g.scale.setScalar(Math.max(0.001, 0.6 + 0.4 * v));
+    if (k === "fade") g.traverse(o => { if (o.material && o.material.transparent) o.material.opacity = (o.material === this.mats.insulShell ? 0.16 : o.material === this.edgeMat ? 0.9 : 0.85) * v; });
+    if (k === "pop") g.traverse(o => { if (o.isMesh) o.visible = v > 0.35; });
+  }
+  set(st, instant){
+    if (!st) return;
+    const T = (k, on) => { if (this.g[k]) this.g[k].userData.t = on ? 1 : 0; };
+    ["group", "geo", "wx", "smoke", "oil", "propane", "gasm", "wac", "cac", "hp", "bat", "evc", "exh"].forEach(k => T(k, !!st[k]));
+    T("solar", st.solar > 0);
+    if (st.solar) { const cols = Math.max(2, Math.min(9, Math.round((st.kw || 8) * 2.5 / 2))); if (cols !== this.cols) this.buildSolar(cols); }
+    this.evT = st.ev ? 1 : 0;
+    if (instant || RM()) { Object.values(this.g).forEach(g => { g.userData.v = g.userData.t; this.apply(g); }); this.evV = this.evT; }
+    this.dirty = true;
+  }
+  recolor(){
+    const m = this.mats;
+    Object.entries(MATS).forEach(([k, v]) => m[k].color.copy(tcol(v)));
+    const glow = parseFloat(cssv("--st-glow")) || 0;
+    m.glass.emissive.copy(tcol("--st-glass")); m.glass.emissiveIntensity = glow * 0.9;
+    m.loop.emissive.copy(tcol("--st-loop")); m.loop.emissiveIntensity = 0.35 + glow * 0.4;
+    m.accent.emissive.copy(tcol("--st-ev")); m.accent.emissiveIntensity = 0.6;
+    m.door.emissive.copy(tcol("--st-door")); m.door.emissiveIntensity = glow * 0.25;
+    m.insulShell.color.copy(tcol("--st-insul")); m.insulShell.emissive.copy(tcol("--st-insul")); m.insulShell.emissiveIntensity = 0.35;
+    m.insul.emissive.copy(tcol("--st-insul")); m.insul.emissiveIntensity = 0.25 + glow * 0.3;
+    this.edgeMat.color.copy(tcol("--st-insul")); m.exh.color.copy(tcol("--st-smoke"));
+    m.solar.emissive.copy(tcol("--st-loop")); m.solar.emissiveIntensity = glow * 0.08;
+    this.hemi.color.copy(tcol("--st-hemi-sky")); this.hemi.groundColor.copy(tcol("--st-hemi-gnd"));
+    this.sun.intensity = parseFloat(cssv("--st-sun")) || 1.2;
+    this.carA = tcol("--st-car"); this.carB = tcol("--st-ev");
+    this.dirty = true;
+  }
+  resize(){
+    const w = this.wrap.clientWidth || 600, h = this.wrap.clientHeight || 380;
+    this.renderer.setSize(w, h, false);
+    this.cam.aspect = w / h;
+    const vf = this.cam.fov * Math.PI / 180, hf = 2 * Math.atan(Math.tan(vf / 2) * this.cam.aspect);
+    this.radius = Math.max(17.8 / Math.tan(hf / 2), 11.2 / Math.tan(vf / 2));
+    this.cam.updateProjectionMatrix(); this.dirty = true;
+  }
+  bindDrag(){
+    const el = this.renderer.domElement; let x0 = 0, a0 = 0, on = false;
+    el.addEventListener("pointerdown", e => { on = true; x0 = e.clientX; a0 = this.az; this.drag = true; try { el.setPointerCapture(e.pointerId); } catch (er) {} });
+    el.addEventListener("pointermove", e => { if (!on) return; this.az = Math.max(-0.95, Math.min(1.25, a0 + (e.clientX - x0) * 0.008)); this.azBase = this.az; this.dirty = true; });
+    const up = () => { on = false; this.drag = false; this.t0 = performance.now(); };
+    el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
+  }
+  tick(now){
+    this.raf = requestAnimationFrame(this.tick);
+    if (!this.visible || document.hidden) return;
+    let moving = false;
+    Object.values(this.g).forEach(g => { const d = g.userData.t - g.userData.v; if (Math.abs(d) > 0.003) { g.userData.v += d * 0.14; moving = true; this.apply(g); } else if (g.userData.v !== g.userData.t) { g.userData.v = g.userData.t; this.apply(g); moving = true; } });
+    if (Math.abs(this.evT - this.evV) > 0.003) { this.evV += (this.evT - this.evV) * 0.12; moving = true; } else this.evV = this.evT;
+    if (this.carA) this.mats.car.color.copy(this.carA).lerp(this.carB, this.evV);
+    const motion = !RM();
+    if (motion) {
+      const t = (now - this.t0) / 1000;
+      if (!this.drag) this.az = this.azBase + Math.sin(t * 0.22) * 0.09;
+      if (this.g.smoke.visible) this.puffs.forEach(p => { const f = (t * 0.22 + p.userData.ph) % 1; p.position.set(-3.4 + f * 1.4, 9.9 + f * 3.4, -1.8 - f * 0.4); p.scale.setScalar(0.6 + f * 1.3); p.material.opacity = 0.85 * this.g.smoke.userData.v; });
+      if (this.g.exh.visible) this.exh.forEach(p => { const f = (t * 0.45 + p.userData.ph) % 1; p.position.set(10.9, 0.4 + f * 0.5, 5.1 - f * 1.4); p.scale.setScalar(0.5 + f * 1.4); });
+    } else {
+      this.puffs.forEach((p, i) => { const f = i / 5; p.position.set(-3.4 + f * 1.4, 9.9 + f * 3.4, -1.8 - f * 0.4); p.scale.setScalar(0.6 + f * 1.3); });
+      this.exh.forEach((p, i) => { const f = i / 3; p.position.set(10.9, 0.4 + f * 0.5, 5.1 - f * 1.4); p.scale.setScalar(0.5 + f * 1.4); });
+    }
+    // keep ambient motion at ~30 fps; transitions and drags at full rate
+    if (!(moving || this.dirty || this.drag) && (!motion || now - this.last < 33)) return;
+    this.last = now; this.dirty = false;
+    const el = 0.47;
+    this.cam.position.set(this.target.x + this.radius * Math.cos(el) * Math.sin(this.az), this.target.y + this.radius * Math.sin(el), this.target.z + this.radius * Math.cos(el) * Math.cos(this.az));
+    this.cam.lookAt(this.target);
+    this.renderer.render(this.scene, this.cam);
+  }
+  dispose(){
+    cancelAnimationFrame(this.raf); this.ro.disconnect(); this.io.disconnect();
+    this.scene.traverse(o => { if (o.geometry) o.geometry.dispose(); });
+    Object.values(this.mats).forEach(m => m.dispose()); this.edgeMat.dispose();
+    this.renderer.dispose(); try { this.renderer.forceContextLoss(); } catch (e) {}
+    this.renderer.domElement.remove();
+  }
+}
+function unmount3D(){ Object.keys(H3).forEach(k => { try { H3[k].dispose(); } catch (e) {} delete H3[k]; }); }
+function mount3D(){
+  if (!can3D()) return;
+  document.querySelectorAll("[data-h3d]").forEach(w => {
+    const id = w.dataset.h3d; if (H3[id]) return;
+    try {
+      const h = new House3D(w, id, { noDrag: w.dataset.nodrag === "1" });
+      H3[id] = h; h.set(LAST[id], true);
+      const svg = $(id); if (svg) svg.setAttribute("hidden", "");
+      const hint = w.querySelector(".hint3d"); if (hint) hint.hidden = false;
+    } catch (e) { /* keep the flat drawing */ }
+  });
+}
+
+/* ---------- design options (looks) ---------- */
+const LOOKS = [
+  { id:"tesla", t:"Tesla Studio", d:"White canvas, one electric-blue action colour, sharp corners", sw:["#FFFFFF", "#171A20", "#3E6AE1", "#E2E3E4"] },
+  { id:"apple", t:"Apple Daylight", d:"Soft grey panels, blue pill buttons, big tight headlines", sw:["#F5F5F7", "#1D1D1F", "#0071E3", "#1B7A33"] },
+  { id:"octopus", t:"Octopus Voltage", d:"Deep indigo, magenta and cyan, glowing (dark only)", sw:["#100030", "#F050F8", "#60F0F8", "#5840FF"] },
+  { id:"material", t:"Material Evergreen", d:"Google Material 3 tonal greens, very round", sw:["#F7FBF4", "#2A6A47", "#B0F1C4", "#BEEAF9"] },
+];
+function setLook(id){
+  if (!LOOKS.some(l => l.id === id)) id = "tesla";
+  document.documentElement.dataset.look = id;
+  try { localStorage.setItem("stoughton-look", id); } catch (e) {}
+  const box = $("looks"); if (box) box.querySelectorAll(".lk").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.look === id)));
+  requestAnimationFrame(() => Object.values(H3).forEach(h => h.recolor()));
+}
+function initLooks(){
+  const box = $("looks"), btn = $("lookbtn"); if (!box || !btn) return;
+  box.innerHTML = '<p>Design options (draft): pick one and tell us which to keep.</p>' + LOOKS.map(l => '<button type="button" class="lk" data-look="' + l.id + '"><span class="sw4">' + l.sw.map(c => '<span style="background:' + c + ';box-shadow:inset 0 0 0 1px rgba(128,128,128,.35)"></span>').join("") + '</span><b>' + l.t + '</b><small>' + l.d + '</small></button>').join("");
+  btn.addEventListener("click", () => { box.hidden = !box.hidden; btn.setAttribute("aria-expanded", String(!box.hidden)); });
+  box.addEventListener("click", e => { const b = e.target.closest(".lk"); if (b) setLook(b.dataset.look); });
+  document.addEventListener("click", e => { if (!box.hidden && !e.target.closest("#looks") && !e.target.closest("#lookbtn")) { box.hidden = true; btn.setAttribute("aria-expanded", "false"); } });
+  let saved = null; try { saved = localStorage.getItem("stoughton-look"); } catch (e) {}
+  setLook(saved || "tesla");
+}
+
+/* ---------- render + navigation ---------- */
+const app = $("app");
+function render(){
+  stopLoop(); unmount3D();
+  document.body.dataset.screen = S.screen;
+  if (S.screen === "landing") { app.innerHTML = vLanding(); startLoop(); }
+  else if (S.screen === "config") { app.innerHTML = vConfig(); renderPanel(); syncStage(true); }
+  else {
+    app.innerHTML = vPlan();
+    syncHouse($("house2"), houseState(hasUps()), true);
+    setSpecs($("pspecs"), planCells, false);
+    drawChart();
+  }
+  mount3D();
+}
+function refresh(keep){
+  if (S.screen === "config") { renderPanel(keep); syncStage(false); }
+  else if (S.screen === "plan") {
+    const fid = keep && document.activeElement && document.activeElement.id, y = window.scrollY;
+    render(); window.scrollTo(0, y); if (fid && $(fid)) $(fid).focus({ preventScroll:true });
+  }
+}
+const top0 = () => window.scrollTo({ top:0, behavior: RM() ? "auto" : "smooth" });
+function start(path, fromMode){
+  S.goal = path;
+  if (path === "explore") { S.tenure = "own"; if (!Object.values(S.up).some(Boolean)) S.up = { wx:true, hp:true, hpwh:true, solar:true, panel:true }; S.open = "upgrades"; }
+  else if (path === "broken") { S.tenure = "own"; S.up = { wx:true, hp:S.heat !== "heatpump", hpwh:true, panel:true }; if (!fromMode) S.open = "home"; }
+  else if (!fromMode) S.open = "home";
+  S.screen = "config"; render();
+  if (!fromMode) top0();
+}
+function openSec(id){
+  S.open = id; renderPanel(); syncStage(false);
+  const el = $("sec-" + id); if (el) el.scrollIntoView({ block:"start", behavior: RM() ? "auto" : "smooth" });
+}
+function nextStep(){
+  const L = secs(), i = L.indexOf(S.open);
+  if (i >= L.length - 1) { S.screen = "plan"; render(); window.scrollTo(0, 0); return; }
+  openSec(L[i + 1]);
+}
+
+/* ---------- events ---------- */
+let deb;
+const later = (f, ms) => { clearTimeout(deb); deb = setTimeout(f, ms || 250); };
+app.addEventListener("change", e => {
+  const t = e.target;
+  if (t.type === "radio") {
+    const n = t.name, v = t.value;
+    if (n === "mode") { start(v, true); return; }
+    if (n === "pack") { const p = packs().find(q => q.id === v); if (p) { S.up = {}; p.up.forEach(k => { S.up[k] = true; }); S.group = !!p.group; if (p.group) { S.leaseMode = "today"; S.kw = netZeroKw(); } } }
+    else if (n === "plan") S.plan = v;
+    else {
+      S.touched = true;
+      if (n === "supplier") { S.supplier = v; S.supply = SUPPLIERS[v].p; }
+      else if (n === "oilp") S.price.oil = OIL[v];
+      else if (n === "heat") { if (v !== S.heat) S.billFuel = ""; S.heat = v; S.exact = ""; }
+      else if (n === "hsize") { S.hsize = v; S.exact = ""; }
+      else S[n] = v;
+    }
+    refresh(true); return;
+  }
+  if (t.dataset.group) { S.group = t.checked; refresh(true); return; }
+  if (t.dataset.up) { const k = t.dataset.up; S.up[k] = t.checked; if (k === "ev" && t.checked) S.up.evc = true; if (k === "geo" && t.checked) S.up.hp = false; if (k === "hp" && t.checked) S.up.geo = false; refresh(true); return; }
+  if (t.id === "income") refresh(true);
+});
+app.addEventListener("input", e => {
+  const t = e.target;
+  if (t.id === "income") { S.income = Number(t.value); S.touched = true; $("incbig").textContent = money(S.income) + (S.income >= 300000 ? "+" : ""); $("band").innerHTML = bandText(); syncStage(false); return; }
+  if (["billElec", "billFuel", "carGas"].includes(t.id)) {
+    S[t.id] = t.value; if (t.id === "billFuel") S.exact = ""; if (t.id !== "carGas") S.touched = true;
+    if (S.screen === "plan") later(() => refresh(true)); else liveUpdate();
+    return;
+  }
+  if (t.id === "bankRate") { S.bankRate = Number(t.value) || 0; liveUpdate(); return; }
+  if (t.id === "leaseRate") { S.leaseRate = Number(t.value) || 0; liveUpdate(); return; }
+  if (t.id === "bankYears") { S.bankYears = Number(t.value) || 15; liveUpdate(); return; }
+  const num = Number(t.value);
+  if (t.id === "f-price") S.price[S.heat] = num || 0;
+  else if (t.id === "f-exact") { S.exact = t.value; S.billFuel = ""; }
+  else if (t.id === "f-base") { S.baseKwh = num || 0; S.billElec = ""; }
+  else if (t.id === "f-supply") S.supply = num || PKG.supplyBasic;
+  else if (t.id === "f-gas") S.gasPrice = num || 4.39;
+  else if (t.dataset.costid) S.cost[t.dataset.costid] = num || 0;
+  else return;
+  later(() => refresh(true));
+});
+// while typing, update the numbers in place (redrawing the panel could swallow the next tap)
+function liveUpdate(){
+  syncStage(false);
+  if ($("usenote")) $("usenote").textContent = useNote();
+  if ($("evmiles")) $("evmiles").textContent = "≈ " + Math.round(carMiles()).toLocaleString("en-US") + " miles a year";
+  if ($("evline")) {
+    const r = run(), r2 = run({ ...activeUps(), ev:false });
+    const delta = (r.bills1 - r2.bills1 - (r.gasoline0 - r2.gasoline0)) / 12;
+    $("evline").innerHTML = "Car price not included" + (Math.abs(delta) < 1 ? "" : ' · <span class="dl ' + (delta < 0 ? "good" : "bad") + '">gas + charging ' + sv(delta) + "/mo</span>");
+  }
+  if ($("pv-C")) {
+    const P = run().plans;
+    ["A", "B", "C"].forEach(v => { const el = $("pv-" + v); if (el && el.textContent) el.innerHTML = '<b>' + money(P[v].monthly(40)) + '/mo</b>' + money(Math.max(0, P[v].interest)) + ' interest'; });
+    if ($("pd-C")) $("pd-C").textContent = S.bankRate + "%, " + S.bankYears + " years";
+  }
+}
+app.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.path) { start(b.dataset.path); return; }
+  if (b.dataset.sec) { if (b.dataset.sec !== S.open) openSec(b.dataset.sec); return; }
+  if (b.dataset.copy) { const txt = b.dataset.copy; try { navigator.clipboard.writeText(txt).then(() => { b.textContent = "Copied"; }, () => { b.textContent = "Select it"; }); } catch (er) { b.textContent = "Select it"; } return; }
+  if (b.dataset.toggle) { S[b.dataset.toggle] = !S[b.dataset.toggle]; S.touched = true; refresh(true); return; }
+  if (b.dataset.hptype) { S.hpType = b.dataset.hptype; refresh(true); return; }
+  if (b.dataset.mpg) { S.mpg = Number(b.dataset.mpg); refresh(true); return; }
+  if (b.dataset.bonus) { S.groupBonus = b.dataset.bonus === "1"; refresh(true); return; }
+  if (b.dataset.cprice) { S.credPrice = Number(b.dataset.cprice); refresh(true); return; }
+  if (b.dataset.lmode) { S.leaseMode = b.dataset.lmode; refresh(true); return; }
+  const a = b.dataset.act; if (!a) return;
+  if (a === "next") nextStep();
+  else if (a === "ppl-") { S.people = Math.max(1, S.people - 1); S.touched = true; refresh(true); }
+  else if (a === "ppl+") { S.people = Math.min(8, S.people + 1); S.touched = true; refresh(true); }
+  else if (a === "kw-") { S.kw = Math.max(2, S.kw - 1); delete S.cost.solar; refresh(true); }
+  else if (a === "kw+") { S.kw = Math.min(20, S.kw + 1); delete S.cost.solar; refresh(true); }
+  else if (a === "kwnz") { S.kw = netZeroKw(); delete S.cost.solar; refresh(true); }
+  else if (a === "more") { S.showMore = true; refresh(true); }
+  else if (a === "copy") copyPlan();
+  else if (a === "edit") { S.screen = "config"; render(); const el = $("sec-" + S.open); if (el) el.scrollIntoView({ block:"start" }); }
+  else if (a === "toupgrade") { S.goal = "upgrade"; S.open = "upgrades"; S.screen = "config"; render(); top0(); }
+  else if (a === "flip") { stopLoop(); landK = 1 - landK; showLand(); }
+  else if (a === "sessions") { const d = $("sessions"); if (d) { d.open = true; d.scrollIntoView({ block:"start", behavior: RM() ? "auto" : "smooth" }); } }
+});
+$("brand").addEventListener("click", () => { S.screen = "landing"; render(); top0(); });
+$("restart").addEventListener("click", () => { S = DEFAULT(); render(); top0(); });
+document.addEventListener("click", e => {
+  const b = e.target.closest("#phones button[data-copy]"); if (!b) return;
+  try { navigator.clipboard.writeText(b.dataset.copy).then(() => { b.textContent = "Copied"; }, () => { b.textContent = "Select it"; }); } catch (er) { b.textContent = "Select it"; }
+});
+let rsz; window.addEventListener("resize", () => { clearTimeout(rsz); rsz = setTimeout(() => { if (S.screen === "plan") drawChart(); }, 150); });
+
+/* ---------- footer ---------- */
+$("roomflag").hidden = ROOM_CONFIRMED;
+$("sched").innerHTML = '<tbody>' + SCHED.map(r => '<tr><td class="num" style="white-space:nowrap">' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td></tr>').join("") + '</tbody>';
+$("phones").innerHTML = phones(Object.values(C).filter((c, i, a) => a.findIndex(d => d[0] === c[0]) === i));
+
+/* deep links from the printed QR codes: #help #upgrade #heatpump #netzero #explore #broken; #design shows the look picker */
+function fromHash(){
+  const h = (location.hash || "").replace("#", "").toLowerCase();
+  if (h === "design") { const b = $("lookbtn"); if (b) b.hidden = false; return false; }
+  if (["help", "upgrade", "explore", "broken"].includes(h)) { start(h); return true; }
+  if (h === "heatpump") { S.goal = "upgrade"; S.tenure = "own"; S.up = { wx:true, hp:S.heat !== "heatpump", hpwh:true, panel:true }; S.group = false; S.open = "upgrades"; S.screen = "config"; render(); return true; }
+  if (h === "netzero") { S.goal = "explore"; S.tenure = "own"; const pk = packs()[0]; S.up = {}; pk.up.forEach(k => { S.up[k] = true; }); S.group = true; S.leaseMode = "today"; S.kw = netZeroKw(); S.open = "upgrades"; S.screen = "config"; render(); return true; }
+  return false;
+}
+initLooks();
+if (!fromHash()) render();
+
+})();
+</script>
